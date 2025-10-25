@@ -1,4 +1,4 @@
-export default function Home() {
+export default function ProfessorPage() {
   return (
     <>
       {/* Title and Language Selector */}

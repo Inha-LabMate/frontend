@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import QueryProvider from "./providers/QueryProvider";
+import Image from "next/image";
+import Sidebar from "./components/Sidebar";
 
 const malgunFont = localFont({
   src: [
@@ -26,7 +29,37 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className={`${malgunFont.variable} antialiased `}>{children}</body>
+      <body className={`${malgunFont.variable} antialiased`}>
+        <QueryProvider>
+          <div className="min-h-screen">
+            {/* Header */}
+            <header className="text-gray-800 bg-white border-b border-gray-200 h-16 flex items-center justify-between px-6">
+              <div className="flex items-center gap-4">
+                <Image
+                  src="/logo_ins.gif"
+                  alt="INHA UNIVERSITY"
+                  width={120}
+                  height={40}
+                  className="object-contain"
+                />
+              </div>
+              <button
+                className="px-4 py-2 rounded text-sm hover:opacity-90 transition-opacity"
+                style={{ backgroundColor: "rgba(255,255,255,0.2)" }}>
+                닫기
+              </button>
+            </header>
+
+            <div className="flex h-[calc(100vh-4rem)]">
+              <Sidebar />
+              {/* Main Content */}
+              <main className="flex-1 bg-white p-8 overflow-auto">
+                {children}
+              </main>
+            </div>
+          </div>
+        </QueryProvider>
+      </body>
     </html>
   );
 }
