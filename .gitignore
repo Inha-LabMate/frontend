@@ -47,3 +47,5 @@ credentials.json
 !package.json
 !package-lock.json
 !tsconfig.json
+# Data files
+!public/data/*.json
