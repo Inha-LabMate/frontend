@@ -4,26 +4,6 @@
  */
 
 // API Response 타입 (서버에서 받는 원본 데이터)
-export interface ApiResearchLab {
-  id: number;
-  department: string;
-  labName?: string;
-  professor?: string;
-  content?: string;
-  year?: string;
-  [key: string]: any; // 추가 필드 대응
-}
-
-export interface ApiGraduateLab {
-  id: number;
-  department: string;
-  labName: string;
-  professor: string;
-  researchArea: string;
-  year?: string;
-  [key: string]: any;
-}
-
 export interface ApiRecommendedLab {
   id: number;
   rank: number;
@@ -34,7 +14,6 @@ export interface ApiRecommendedLab {
   compatibility: string; // "적합도" (높음/중간/낮음)
   expectedAcceptance: string; // "예상합격률" (높음/중간/낮음)
   reason: string; // "추천이유"
-  [key: string]: any;
 }
 
 export interface ApiResumeStatus {
@@ -48,7 +27,9 @@ export const researchLabsApi = {
    * 학부연구생 연구실 목록 조회
    * 정적 JSON 파일에서 데이터 로드
    */
-  getUndergradLabs: async (year?: string): Promise<any[]> => {
+  getUndergradLabs: async (
+    year?: string
+  ): Promise<Record<string, unknown>[]> => {
     try {
       // 정적 JSON 파일에서 데이터 로드
       const response = await fetch("/data/undergrad-labs.json");
@@ -56,11 +37,11 @@ export const researchLabsApi = {
         throw new Error("데이터 파일을 찾을 수 없습니다");
       }
 
-      const data = await response.json();
+      const data = (await response.json()) as Record<string, unknown>[];
 
       // year 필터링 (JSON 파일의 한글 필드 그대로 반환)
       if (year) {
-        return data.filter((item: any) => item.년도학기 === year);
+        return data.filter((item) => item.년도학기 === year);
       }
 
       return data;
@@ -74,7 +55,9 @@ export const researchLabsApi = {
    * 대학원 연구실 목록 조회
    * 정적 JSON 파일에서 데이터 로드
    */
-  getGraduateLabs: async (year?: string): Promise<any[]> => {
+  getGraduateLabs: async (
+    year?: string
+  ): Promise<Record<string, unknown>[]> => {
     try {
       // 정적 JSON 파일에서 데이터 로드
       const response = await fetch("/data/graduate-labs.json");
@@ -82,11 +65,11 @@ export const researchLabsApi = {
         throw new Error("데이터 파일을 찾을 수 없습니다");
       }
 
-      const data = await response.json();
+      const data = (await response.json()) as Record<string, unknown>[];
 
       // year 필터링 (JSON 파일의 한글 필드 그대로 반환)
       if (year) {
-        return data.filter((item: any) => item.년도학기 === year);
+        return data.filter((item) => item.년도학기 === year);
       }
 
       return data;

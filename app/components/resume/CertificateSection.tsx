@@ -16,7 +16,7 @@ interface Props {
 export default function CertificateSection({ data }: Props) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { mutate: addCertificate } = useAddCertificate();
-  const { mutate: deleteCertificate } = useDeleteCertificate();
+  const { mutate: _deleteCertificate } = useDeleteCertificate();
 
   const [formData, setFormData] = useState({
     name: "",

@@ -13,7 +13,7 @@ interface Props {
 export default function AwardSection({ data }: Props) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { mutate: addAward } = useAddAward();
-  const { mutate: deleteAward } = useDeleteAward();
+  const { mutate: _deleteAward } = useDeleteAward();
 
   const [formData, setFormData] = useState({
     content: "",

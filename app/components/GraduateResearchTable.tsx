@@ -2,16 +2,7 @@
 
 import { useState } from "react";
 import { useGraduateLabs } from "../../lib/hooks/useResearchLabs";
-
-interface LabDetail {
-  id: string;
-  연번?: string;
-  학과: string;
-  연구실명?: string;
-  지도교수?: string;
-  연구내용?: string;
-  년도학기?: string;
-}
+import type { GraduateLab } from "../../lib/adapters/research-labs.adapter";
 
 // 년도학기 포맷 변환 함수 (20252 -> 2025-2)
 const formatYearSemester = (yearSemester: string): string => {
@@ -23,14 +14,14 @@ const formatYearSemester = (yearSemester: string): string => {
 
 export default function GraduateResearchTable() {
   const [selectedYear, setSelectedYear] = useState("20252");
-  const [selectedLab, setSelectedLab] = useState<LabDetail | null>(null);
+  const [selectedLab, setSelectedLab] = useState<GraduateLab | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { data: labs, isLoading, error } = useGraduateLabs(selectedYear);
 
   // 년도학기 정렬 (최신순)
   const years = ["20253", "20252", "20251"];
 
-  const handleViewDetail = (lab: any) => {
+  const handleViewDetail = (lab: GraduateLab) => {
     setSelectedLab(lab);
     setIsModalOpen(true);
   };
@@ -102,14 +93,14 @@ export default function GraduateResearchTable() {
                   index % 2 === 1 ? "bg-gray-50" : ""
                 }`}>
                 <div className="px-6 py-4 text-center border-r border-gray-200 text-gray-900 text-base font-medium">
-                  {(lab as any).학과}
+                  {lab.학과}
                 </div>
                 <div className="px-6 py-4 text-center border-r border-gray-200">
                   <div className="text-gray-900 text-base font-medium">
-                    {(lab as any).연구실명 || "-"}
+                    {lab.연구실명 || "-"}
                   </div>
                   <div className="text-gray-600 text-sm mt-1">
-                    {(lab as any).지도교수 || (lab as any).교수명 || "-"}
+                    {lab.지도교수 || "-"}
                   </div>
                 </div>
                 <div className="px-6 py-4 flex items-center justify-center">
@@ -162,37 +153,34 @@ export default function GraduateResearchTable() {
                 <div className="border-b pb-4">
                   <div className="text-sm text-gray-500 mb-1">학과</div>
                   <div className="text-lg font-semibold text-gray-900">
-                    {(selectedLab as any).학과}
+                    {selectedLab.학과}
                   </div>
                 </div>
 
                 <div className="border-b pb-4">
                   <div className="text-sm text-gray-500 mb-1">연구실명</div>
                   <div className="text-lg font-semibold text-gray-900">
-                    {(selectedLab as any).연구실명 || "정보 없음"}
+                    {selectedLab.연구실명 || "정보 없음"}
                   </div>
                 </div>
 
                 <div className="border-b pb-4">
                   <div className="text-sm text-gray-500 mb-1">지도교수</div>
                   <div className="text-lg font-semibold text-gray-900">
-                    {(selectedLab as any).지도교수 ||
-                      (selectedLab as any).교수명 ||
-                      "정보 없음"}
+                    {selectedLab.지도교수 || "정보 없음"}
                   </div>
                 </div>
 
                 <div className="pb-4">
                   <div className="text-sm text-gray-500 mb-1">연구내용</div>
                   <div className="text-base text-gray-800 leading-relaxed whitespace-pre-wrap">
-                    {(selectedLab as any).연구내용 || "정보 없음"}
+                    {selectedLab.연구내용 || "정보 없음"}
                   </div>
                 </div>
 
-                {(selectedLab as any).년도학기 && (
+                {selectedLab.년도학기 && (
                   <div className="text-sm text-gray-500">
-                    년도학기:{" "}
-                    {formatYearSemester((selectedLab as any).년도학기)}
+                    년도학기: {formatYearSemester(selectedLab.년도학기)}
                   </div>
                 )}
               </div>

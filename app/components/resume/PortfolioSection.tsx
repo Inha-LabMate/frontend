@@ -16,7 +16,7 @@ interface Props {
 export default function PortfolioSection({ data }: Props) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { mutate: addPortfolio } = useAddPortfolio();
-  const { mutate: deletePortfolio } = useDeletePortfolio();
+  const { mutate: _deletePortfolio } = useDeletePortfolio();
 
   const [formData, setFormData] = useState({
     type: "",

@@ -16,7 +16,7 @@ interface Props {
 export default function LanguageSection({ data }: Props) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { mutate: addLanguage } = useAddLanguage();
-  const { mutate: deleteLanguage } = useDeleteLanguage();
+  const { mutate: _deleteLanguage } = useDeleteLanguage();
 
   const [formData, setFormData] = useState({
     language: "",

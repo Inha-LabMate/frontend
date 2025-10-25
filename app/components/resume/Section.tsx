@@ -15,7 +15,6 @@ export default function Section({
   icon = "▶",
   onAdd,
   children,
-  collapsible = true,
 }: SectionProps) {
   return (
     <div className="mb-6">

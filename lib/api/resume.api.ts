@@ -3,7 +3,7 @@
  * 이력서 관리 API
  */
 
-import { publicAxiosInstance } from "./axiosInstance";
+// import { publicAxiosInstance } from "./axiosInstance";
 
 // === 기본 정보 ===
 export interface ApiBasicInfo {
@@ -122,9 +122,9 @@ export const resumeApi = {
   /**
    * 기본 정보 수정
    */
-  updateBasicInfo: async (data: ApiBasicInfo): Promise<void> => {
+  updateBasicInfo: async (_data: ApiBasicInfo): Promise<void> => {
     // TODO: 실제 API 연동
-    // await publicAxiosInstance.put('/resume/basic-info', data);
+    // await publicAxiosInstance.put('/resume/basic-info', _data);
     return new Promise((resolve) => setTimeout(resolve, 300));
   },
 
@@ -143,9 +143,9 @@ export const resumeApi = {
   /**
    * 언어 능력 삭제
    */
-  deleteLanguage: async (id: number): Promise<void> => {
+  deleteLanguage: async (_id: number): Promise<void> => {
     // TODO: 실제 API 연동
-    // await publicAxiosInstance.delete(`/resume/languages/${id}`);
+    // await publicAxiosInstance.delete(`/resume/languages/${_id}`);
     return new Promise((resolve) => setTimeout(resolve, 300));
   },
 
@@ -164,7 +164,7 @@ export const resumeApi = {
   /**
    * 자격증 삭제
    */
-  deleteCertificate: async (id: number): Promise<void> => {
+  deleteCertificate: async (_id: number): Promise<void> => {
     return new Promise((resolve) => setTimeout(resolve, 300));
   },
 
@@ -180,7 +180,7 @@ export const resumeApi = {
   /**
    * 수상경력 삭제
    */
-  deleteAward: async (id: number): Promise<void> => {
+  deleteAward: async (_id: number): Promise<void> => {
     return new Promise((resolve) => setTimeout(resolve, 300));
   },
 
@@ -198,16 +198,16 @@ export const resumeApi = {
   /**
    * 포트폴리오 삭제
    */
-  deletePortfolio: async (id: number): Promise<void> => {
+  deletePortfolio: async (_id: number): Promise<void> => {
     return new Promise((resolve) => setTimeout(resolve, 300));
   },
 
   /**
    * 자기소개서 저장
    */
-  saveCoverLetter: async (data: ApiCoverLetter): Promise<void> => {
+  saveCoverLetter: async (_data: ApiCoverLetter): Promise<void> => {
     // TODO: 실제 API 연동
-    // await publicAxiosInstance.put('/resume/cover-letter', data);
+    // await publicAxiosInstance.put('/resume/cover-letter', _data);
     return new Promise((resolve) => setTimeout(resolve, 300));
   },
 };

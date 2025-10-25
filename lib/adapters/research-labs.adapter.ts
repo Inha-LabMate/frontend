@@ -5,8 +5,6 @@
  */
 
 import type {
-  ApiResearchLab,
-  ApiGraduateLab,
   ApiRecommendedLab,
   ApiResumeStatus,
 } from "../api/research-labs.api";
@@ -20,7 +18,7 @@ export interface ResearchLab {
   교수명?: string;
   연구내용?: string;
   년도학기?: string;
-  [key: string]: any;
+  [key: string]: string | undefined;
 }
 
 export interface GraduateLab {
@@ -31,7 +29,7 @@ export interface GraduateLab {
   지도교수?: string;
   연구내용?: string;
   년도학기?: string;
-  [key: string]: any;
+  [key: string]: string | undefined;
 }
 
 export interface RecommendedLab {
@@ -55,11 +53,15 @@ export interface ResumeStatus {
  * 학부연구생 데이터 어댑터
  * JSON 파일의 데이터를 그대로 반환 (한글 필드 유지)
  */
-export const adaptUndergradLab = (apiData: any): ResearchLab => {
+export const adaptUndergradLab = (
+  apiData: Record<string, unknown>
+): ResearchLab => {
   return apiData as ResearchLab;
 };
 
-export const adaptUndergradLabs = (apiData: any[]): ResearchLab[] => {
+export const adaptUndergradLabs = (
+  apiData: Record<string, unknown>[]
+): ResearchLab[] => {
   return apiData.map(adaptUndergradLab);
 };
 
@@ -67,11 +69,15 @@ export const adaptUndergradLabs = (apiData: any[]): ResearchLab[] => {
  * 대학원 연구실 데이터 어댑터
  * JSON 파일의 데이터를 그대로 반환 (한글 필드 유지)
  */
-export const adaptGraduateLab = (apiData: any): GraduateLab => {
+export const adaptGraduateLab = (
+  apiData: Record<string, unknown>
+): GraduateLab => {
   return apiData as GraduateLab;
 };
 
-export const adaptGraduateLabs = (apiData: any[]): GraduateLab[] => {
+export const adaptGraduateLabs = (
+  apiData: Record<string, unknown>[]
+): GraduateLab[] => {
   return apiData.map(adaptGraduateLab);
 };
 
