@@ -50,12 +50,10 @@ export default function RootLayout({
               </button>
             </header>
 
-            <div className="flex h-[calc(100vh-4rem)]">
+            <div className="flex">
               <Sidebar />
               {/* Main Content */}
-              <main className="flex-1 bg-white p-8 overflow-auto">
-                {children}
-              </main>
+              <main className="flex-1 bg-white p-8">{children}</main>
             </div>
           </div>
         </QueryProvider>

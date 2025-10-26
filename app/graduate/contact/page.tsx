@@ -190,8 +190,8 @@ export default function GraduateContactPage() {
           </div>
 
           {/* Search Results Table */}
-          <div className="border border-gray-300 rounded-md overflow-hidden mb-8">
-            <div className="grid grid-cols-[100px_150px_150px_200px_150px_150px] bg-inha-blue text-white">
+          <div className="border border-gray-300 rounded-md overflow-x-auto mb-8">
+            <div className="grid grid-cols-[100px_150px_150px_200px_150px_150px] bg-inha-blue text-white min-w-[900px]">
               <div className="px-4 py-3 text-center text-sm font-semibold border-r border-white/30">
                 지원학기
               </div>
@@ -212,7 +212,7 @@ export default function GraduateContactPage() {
               </div>
             </div>
 
-            <div className="bg-white">
+            <div className="bg-white min-w-[900px]">
               <div className="py-12 text-center text-black text-sm">
                 조회된 Data가 존재 하지 않습니다
               </div>
@@ -234,9 +234,9 @@ export default function GraduateContactPage() {
                 </button>
               </div>
             ) : (
-              <div className="border border-gray-200 rounded-lg overflow-hidden">
+              <div className="border border-gray-200 rounded-lg overflow-x-auto">
                 {/* Header Row */}
-                <div className="grid grid-cols-6 bg-gray-50 border-b">
+                <div className="grid grid-cols-6 bg-gray-50 border-b min-w-[900px]">
                   <div className="px-4 py-3 text-center text-sm font-semibold text-black border-r">
                     지원학기
                   </div>
@@ -258,7 +258,7 @@ export default function GraduateContactPage() {
                 </div>
 
                 {/* Input Row */}
-                <div className="grid grid-cols-6 bg-white border-b">
+                <div className="grid grid-cols-6 bg-white border-b min-w-[900px]">
                   <div className="px-2 py-3 text-center border-r">
                     <input
                       type="text"
@@ -438,8 +438,8 @@ export default function GraduateContactPage() {
         <div>
           <h2 className="text-xl font-bold text-black mb-4">대학원 컨택내역</h2>
 
-          <div className="border border-gray-300 rounded-md overflow-hidden">
-            <div className="grid grid-cols-[100px_150px_150px_200px_150px_120px] bg-inha-blue text-white">
+          <div className="border border-gray-300 rounded-md overflow-x-auto">
+            <div className="grid grid-cols-[100px_150px_150px_200px_150px_120px] bg-inha-blue text-white min-w-[870px]">
               <div className="px-4 py-3 text-center text-sm font-semibold border-r border-white/30">
                 지원학기
               </div>
@@ -460,7 +460,7 @@ export default function GraduateContactPage() {
               </div>
             </div>
 
-            <div className="bg-white">
+            <div className="bg-white min-w-[870px]">
               {contacts.length === 0 ? (
                 <div className="py-12 text-center text-black text-sm">
                   조회된 Data가 존재 하지 않습니다
@@ -469,7 +469,7 @@ export default function GraduateContactPage() {
                 contacts.map((contact, index) => (
                   <div
                     key={contact.id}
-                    className={`grid grid-cols-[100px_150px_150px_200px_150px_120px] border-b border-gray-200 ${
+                    className={`grid grid-cols-[100px_150px_150px_200px_150px_120px] border-b border-gray-200 min-w-[870px] ${
                       index % 2 === 1 ? "bg-gray-50" : ""
                     }`}>
                     <div className="px-4 py-3 text-center text-sm text-black border-r">

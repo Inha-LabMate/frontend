@@ -65,9 +65,9 @@ export default function UndergradResearchTable() {
       </div>
 
       {/* Table */}
-      <div className="border border-gray-300 rounded-md overflow-hidden">
+      <div className="border border-gray-300 rounded-md overflow-x-auto">
         {/* Table Header */}
-        <div className="grid grid-cols-[150px_1fr_150px] bg-inha-blue text-white">
+        <div className="grid grid-cols-[150px_1fr_150px] bg-inha-blue text-white min-w-[600px]">
           <div className="px-6 py-4 text-center font-semibold text-base border-r border-white/30">
             운영학과
           </div>
@@ -89,7 +89,7 @@ export default function UndergradResearchTable() {
             {labs?.map((lab, index) => (
               <div
                 key={lab.id}
-                className={`grid grid-cols-[150px_1fr_150px] border-b border-gray-200 hover:bg-blue-50 transition-colors ${
+                className={`grid grid-cols-[150px_1fr_150px] border-b border-gray-200 hover:bg-blue-50 transition-colors min-w-[600px] ${
                   index % 2 === 1 ? "bg-gray-50" : ""
                 }`}>
                 <div className="px-6 py-4 text-center border-r border-gray-200 text-gray-900 text-base font-medium">

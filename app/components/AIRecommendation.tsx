@@ -117,9 +117,9 @@ export default function AIRecommendation() {
         </h2>
 
         {/* Results Table */}
-        <div className="border border-gray-300 overflow-hidden rounded-lg">
+        <div className="border border-gray-300 overflow-x-auto rounded-lg">
           {/* Table Header */}
-          <div className="grid grid-cols-[80px_1fr_200px_1fr] bg-blue-100 border-b border-gray-300">
+          <div className="grid grid-cols-[80px_1fr_200px_1fr] bg-blue-100 border-b border-gray-300 min-w-[700px]">
             <div className="px-4 py-3 text-center font-medium text-gray-800 border-r border-gray-300">
               순위
             </div>
@@ -139,7 +139,7 @@ export default function AIRecommendation() {
             {recommendedLabs.map((lab) => (
               <div
                 key={lab.id}
-                className="grid grid-cols-[80px_1fr_200px_1fr] border-b border-gray-200 hover:bg-gray-50 transition-colors">
+                className="grid grid-cols-[80px_1fr_200px_1fr] border-b border-gray-200 hover:bg-gray-50 transition-colors min-w-[700px]">
                 {/* Rank with icon */}
                 <div className="px-4 py-6 flex items-center justify-center border-r border-gray-200">
                   {lab.rank <= 3 ? (
