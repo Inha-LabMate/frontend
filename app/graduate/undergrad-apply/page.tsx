@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useSubmitApplication } from "@/lib/hooks/useUndergradApply";
 
 interface ApplicationForm {
   name: string;
@@ -19,6 +20,8 @@ interface ApplicationForm {
 }
 
 export default function UndergradApplyPage() {
+  const submitMutation = useSubmitApplication();
+
   const [formData, setFormData] = useState<ApplicationForm>({
     name: "",
     studentId: "",
@@ -35,8 +38,6 @@ export default function UndergradApplyPage() {
     interests: "",
   });
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
@@ -48,30 +49,31 @@ export default function UndergradApplyPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
 
-    // TODO: 실제 API 호출
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    try {
+      const result = await submitMutation.mutateAsync(formData);
+      alert(result.message);
 
-    alert("학부연구생 신청이 완료되었습니다!");
-    setIsSubmitting(false);
-
-    // 폼 초기화
-    setFormData({
-      name: "",
-      studentId: "",
-      department: "",
-      grade: "",
-      phone: "",
-      email: "",
-      gpa: "",
-      yearSemester: "20252",
-      preferredLab: "",
-      professor: "",
-      motivation: "",
-      experience: "",
-      interests: "",
-    });
+      // 폼 초기화
+      setFormData({
+        name: "",
+        studentId: "",
+        department: "",
+        grade: "",
+        phone: "",
+        email: "",
+        gpa: "",
+        yearSemester: "20252",
+        preferredLab: "",
+        professor: "",
+        motivation: "",
+        experience: "",
+        interests: "",
+      });
+    } catch (error) {
+      alert("신청 중 오류가 발생했습니다.");
+      console.error(error);
+    }
   };
 
   return (
@@ -366,9 +368,9 @@ export default function UndergradApplyPage() {
         <div className="flex justify-center gap-3 pt-4">
           <button
             type="submit"
-            disabled={isSubmitting}
+            disabled={submitMutation.isPending}
             className="px-8 py-3 bg-inha-blue text-white font-medium rounded-md hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed">
-            {isSubmitting ? "신청 중..." : "신청하기"}
+            {submitMutation.isPending ? "신청 중..." : "신청하기"}
           </button>
           <button
             type="button"

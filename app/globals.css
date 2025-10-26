@@ -32,3 +32,31 @@ body {
   color: var(--foreground);
   font-family: var(--font-malgun), Arial, Helvetica, sans-serif;
 }
+
+/* Input, Select, Textarea 기본 색상 설정 */
+input,
+select,
+textarea {
+  color: black !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: rgb(156, 163, 175) !important; /* gray-400 */
+}
+
+/* Select option 색상 */
+option {
+  color: black !important;
+  background-color: white !important;
+}
+
+/* Autofill 색상 방지 */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px white inset !important;
+  -webkit-text-fill-color: black !important;
+  box-shadow: 0 0 0 30px white inset !important;
+}

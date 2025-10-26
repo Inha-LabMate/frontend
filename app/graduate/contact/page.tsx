@@ -1,48 +1,48 @@
 "use client";
 
-import { useState } from "react";
-
-interface ContactRecord {
-  id: number;
-  지원학기: string;
-  개설학과: string;
-  세부전공: string;
-  연구실명: string;
-  지도교수: string;
-  컨택신청: "완료" | "대기";
-  이력서연동: boolean;
-  자기소개서연동: boolean;
-  내용: string;
-  기타파일: string;
-}
+import { useState, useEffect, useRef } from "react";
+import {
+  useContactLabs,
+  useContactRecords,
+  useSubmitContact,
+} from "@/lib/hooks/useContact";
+import type { ContactLab } from "@/lib/adapters/contact.adapter";
 
 export default function GraduateContactPage() {
   const [activeTab, setActiveTab] = useState<"search" | "history">("search");
+  const contactFormRef = useRef<HTMLDivElement>(null);
+
+  // 검색 필터 상태
   const [searchCategory, setSearchCategory] = useState("학과");
   const [searchSemester, setSearchSemester] = useState("세부전공");
   const [searchKeyword, setSearchKeyword] = useState("");
+  const [searchParams, setSearchParams] = useState<{
+    category?: string;
+    semester?: string;
+    keyword?: string;
+  }>({ category: "학과", semester: "세부전공", keyword: "" }); // 초기 로딩
 
-  // 더미 데이터
-  const [contacts, setContacts] = useState<ContactRecord[]>([
-    {
-      id: 1,
-      지원학기: "20261",
-      개설학과: "전기컴퓨터공학과",
-      세부전공: "인공지능공학",
-      연구실명: "금융 인공지능 연구실",
-      지도교수: "김동국",
-      컨택신청: "완료",
-      이력서연동: true,
-      자기소개서연동: true,
-      내용: "안녕하세요. 귀 연구실의 금융 AI 연구에 관심이 많아 지원하고자 합니다.",
-      기타파일: "",
-    },
-  ]);
+  // 컨택 내역 필터 상태
+  const [filterSemester, setFilterSemester] = useState("전체");
+  const [filterDepartment, setFilterDepartment] = useState("전체");
+  const [filterStatus, setFilterStatus] = useState("전체");
+  const [historyParams, setHistoryParams] = useState<{
+    semester?: string;
+    department?: string;
+    status?: string;
+  }>({});
 
-  const [newContact, setNewContact] = useState<Partial<ContactRecord>>({
+  // React Query Hooks
+  const { data: labs = [], isLoading: isLoadingLabs } =
+    useContactLabs(searchParams);
+  const { data: contacts = [], isLoading: isLoadingContacts } =
+    useContactRecords(historyParams);
+  const submitContactMutation = useSubmitContact();
+
+  const [newContact, setNewContact] = useState({
     지원학기: "20261",
-    개설학과: "전기컴퓨터공학과",
-    세부전공: "인공지능공학",
+    개설학과: "",
+    세부전공: "",
     연구실명: "",
     지도교수: "",
     이력서연동: false,
@@ -53,53 +53,102 @@ export default function GraduateContactPage() {
 
   const [isAddingContact, setIsAddingContact] = useState(false);
 
+  // 컨택 신청서가 열릴 때 스크롤
+  useEffect(() => {
+    if (isAddingContact && contactFormRef.current) {
+      setTimeout(() => {
+        contactFormRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }, 100);
+    }
+  }, [isAddingContact]);
+
   const handleAddContact = () => {
     setIsAddingContact(true);
   };
 
-  const handleSaveContact = () => {
-    const contact: ContactRecord = {
-      id: Date.now(),
-      지원학기: newContact.지원학기 || "20261",
-      개설학과: newContact.개설학과 || "",
-      세부전공: newContact.세부전공 || "",
-      연구실명: newContact.연구실명 || "",
-      지도교수: newContact.지도교수 || "",
-      컨택신청: "대기",
-      이력서연동: newContact.이력서연동 || false,
-      자기소개서연동: newContact.자기소개서연동 || false,
-      내용: newContact.내용 || "",
-      기타파일: newContact.기타파일 || "",
-    };
-
-    setContacts([...contacts, contact]);
-    setIsAddingContact(false);
-    setNewContact({
-      지원학기: "20261",
-      개설학과: "전기컴퓨터공학과",
-      세부전공: "인공지능공학",
-      연구실명: "",
-      지도교수: "",
-      이력서연동: false,
-      자기소개서연동: false,
-      내용: "",
-      기타파일: "",
+  const handleSearch = () => {
+    setSearchParams({
+      category: searchCategory,
+      semester: searchSemester,
+      keyword: searchKeyword,
     });
   };
 
-  const handleCancelContact = () => {
-    setIsAddingContact(false);
-    setNewContact({
-      지원학기: "20261",
-      개설학과: "전기컴퓨터공학과",
-      세부전공: "인공지능공학",
-      연구실명: "",
-      지도교수: "",
-      이력서연동: false,
-      자기소개서연동: false,
-      내용: "",
-      기타파일: "",
+  const handleFilterContacts = () => {
+    setHistoryParams({
+      semester: filterSemester,
+      department: filterDepartment,
+      status: filterStatus,
     });
+  };
+
+  // 연구실 선택 핸들러
+  const handleSelectLab = (lab: ContactLab) => {
+    setNewContact({
+      ...newContact,
+      지원학기: lab.지원학기,
+      개설학과: lab.개설학과,
+      세부전공: lab.세부전공,
+      연구실명: lab.연구실명,
+      지도교수: lab.지도교수,
+    });
+    setIsAddingContact(true);
+  };
+
+  const handleSaveContact = async () => {
+    // 유효성 검사
+    if (!newContact.연구실명 || !newContact.지도교수) {
+      alert("연구실명과 지도교수를 입력해주세요.");
+      return;
+    }
+
+    if (!newContact.내용.trim()) {
+      alert("컨택 내용을 입력해주세요.");
+      return;
+    }
+
+    try {
+      await submitContactMutation.mutateAsync(newContact);
+      alert("컨택 신청이 완료되었습니다!");
+      setIsAddingContact(false);
+      setNewContact({
+        지원학기: "20261",
+        개설학과: "",
+        세부전공: "",
+        연구실명: "",
+        지도교수: "",
+        이력서연동: false,
+        자기소개서연동: false,
+        내용: "",
+        기타파일: "",
+      });
+
+      // 컨택 내역 탭으로 자동 전환
+      setActiveTab("history");
+    } catch (error) {
+      alert("컨택 신청 중 오류가 발생했습니다.");
+      console.error(error);
+    }
+  };
+
+  const handleCancelContact = () => {
+    if (confirm("작성 중인 내용이 삭제됩니다. 취소하시겠습니까?")) {
+      setIsAddingContact(false);
+      setNewContact({
+        지원학기: "20261",
+        개설학과: "",
+        세부전공: "",
+        연구실명: "",
+        지도교수: "",
+        이력서연동: false,
+        자기소개서연동: false,
+        내용: "",
+        기타파일: "",
+      });
+    }
   };
 
   return (
@@ -172,7 +221,9 @@ export default function GraduateContactPage() {
               </option>
             </select>
 
-            <button className="px-6 py-2 bg-blue-500 text-white text-sm font-medium rounded hover:bg-blue-600 transition-colors">
+            <button
+              onClick={handleSearch}
+              className="px-6 py-2 bg-blue-500 text-white text-sm font-medium rounded hover:bg-blue-600 transition-colors">
               조회
             </button>
 
@@ -181,10 +232,13 @@ export default function GraduateContactPage() {
               type="text"
               value={searchKeyword}
               onChange={(e) => setSearchKeyword(e.target.value)}
+              onKeyPress={(e) => e.key === "Enter" && handleSearch()}
               className="flex-1 px-4 py-2 border border-gray-300 rounded-md text-sm text-black bg-white placeholder:text-gray-400 focus:ring-2 focus:ring-inha-blue focus:border-inha-blue"
               placeholder="검색어를 입력하세요"
             />
-            <button className="px-6 py-2 bg-blue-500 text-white text-sm font-medium rounded hover:bg-blue-600 transition-colors">
+            <button
+              onClick={handleSearch}
+              className="px-6 py-2 bg-blue-500 text-white text-sm font-medium rounded hover:bg-blue-600 transition-colors">
               검색
             </button>
           </div>
@@ -213,14 +267,58 @@ export default function GraduateContactPage() {
             </div>
 
             <div className="bg-white min-w-[900px]">
-              <div className="py-12 text-center text-black text-sm">
-                조회된 Data가 존재 하지 않습니다
-              </div>
+              {isLoadingLabs ? (
+                <div className="py-12 text-center text-black text-sm">
+                  로딩 중...
+                </div>
+              ) : labs.length === 0 ? (
+                <div className="py-12 text-center text-black text-sm">
+                  조회된 Data가 존재 하지 않습니다
+                </div>
+              ) : (
+                labs.map((lab, index) => (
+                  <div
+                    key={lab.id}
+                    className={`grid grid-cols-[100px_150px_150px_200px_150px_150px] border-b border-gray-200 min-w-[900px] ${
+                      index % 2 === 1 ? "bg-gray-50" : ""
+                    }`}>
+                    <div className="px-4 py-3 text-center text-sm text-black border-r">
+                      {lab.지원학기}
+                    </div>
+                    <div className="px-4 py-3 text-center text-sm text-black border-r">
+                      {lab.개설학과}
+                    </div>
+                    <div className="px-4 py-3 text-center text-sm text-black border-r">
+                      {lab.세부전공}
+                    </div>
+                    <div className="px-4 py-3 text-center text-sm text-black border-r">
+                      {lab.연구실명}
+                    </div>
+                    <div className="px-4 py-3 text-center text-sm text-black border-r">
+                      {lab.지도교수}
+                    </div>
+                    <div className="px-4 py-3 flex items-center justify-center">
+                      <button
+                        onClick={() => handleSelectLab(lab)}
+                        disabled={!lab.컨택가능}
+                        className={`px-4 py-1 text-xs rounded transition-colors ${
+                          lab.컨택가능
+                            ? "bg-blue-500 text-white hover:bg-blue-600"
+                            : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                        }`}>
+                        {lab.컨택가능 ? "컨택선택" : "불가"}
+                      </button>
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
           </div>
 
           {/* Add Contact Section */}
-          <div className="bg-white border border-gray-300 rounded-md p-6">
+          <div
+            ref={contactFormRef}
+            className="bg-white border border-gray-300 rounded-md p-6">
             <h3 className="text-lg font-bold text-black mb-4">
               대학원 컨택신청
             </h3>
@@ -260,76 +358,34 @@ export default function GraduateContactPage() {
                 {/* Input Row */}
                 <div className="grid grid-cols-6 bg-white border-b min-w-[900px]">
                   <div className="px-2 py-3 text-center border-r">
-                    <input
-                      type="text"
-                      value={newContact.지원학기}
-                      onChange={(e) =>
-                        setNewContact({
-                          ...newContact,
-                          지원학기: e.target.value,
-                        })
-                      }
-                      className="w-full px-2 py-1 text-sm text-black bg-white placeholder:text-gray-400 border border-gray-300 rounded text-center"
-                    />
+                    <div className="w-full px-2 py-1 text-sm text-black bg-gray-100 border border-gray-300 rounded text-center">
+                      {newContact.지원학기 || "미선택"}
+                    </div>
                   </div>
                   <div className="px-2 py-3 text-center border-r">
-                    <input
-                      type="text"
-                      value={newContact.개설학과}
-                      onChange={(e) =>
-                        setNewContact({
-                          ...newContact,
-                          개설학과: e.target.value,
-                        })
-                      }
-                      className="w-full px-2 py-1 text-sm text-black bg-white placeholder:text-gray-400 border border-gray-300 rounded text-center"
-                    />
+                    <div className="w-full px-2 py-1 text-sm text-black bg-gray-100 border border-gray-300 rounded text-center">
+                      {newContact.개설학과 || "미선택"}
+                    </div>
                   </div>
                   <div className="px-2 py-3 text-center border-r">
-                    <input
-                      type="text"
-                      value={newContact.세부전공}
-                      onChange={(e) =>
-                        setNewContact({
-                          ...newContact,
-                          세부전공: e.target.value,
-                        })
-                      }
-                      className="w-full px-2 py-1 text-sm text-black bg-white placeholder:text-gray-400 border border-gray-300 rounded text-center"
-                    />
+                    <div className="w-full px-2 py-1 text-sm text-black bg-gray-100 border border-gray-300 rounded text-center">
+                      {newContact.세부전공 || "미선택"}
+                    </div>
                   </div>
                   <div className="px-2 py-3 text-center border-r">
-                    <input
-                      type="text"
-                      value={newContact.연구실명}
-                      onChange={(e) =>
-                        setNewContact({
-                          ...newContact,
-                          연구실명: e.target.value,
-                        })
-                      }
-                      className="w-full px-2 py-1 text-sm text-black bg-white placeholder:text-gray-400 border border-gray-300 rounded text-center"
-                      placeholder="연구실명 입력"
-                    />
+                    <div className="w-full px-2 py-1 text-sm text-black bg-gray-100 border border-gray-300 rounded text-center">
+                      {newContact.연구실명 || "미선택"}
+                    </div>
                   </div>
                   <div className="px-2 py-3 text-center border-r">
-                    <input
-                      type="text"
-                      value={newContact.지도교수}
-                      onChange={(e) =>
-                        setNewContact({
-                          ...newContact,
-                          지도교수: e.target.value,
-                        })
-                      }
-                      className="w-full px-2 py-1 text-sm text-black bg-white placeholder:text-gray-400 border border-gray-300 rounded text-center"
-                      placeholder="교수명 입력"
-                    />
+                    <div className="w-full px-2 py-1 text-sm text-black bg-gray-100 border border-gray-300 rounded text-center">
+                      {newContact.지도교수 || "미선택"}
+                    </div>
                   </div>
                   <div className="px-2 py-3 flex items-center justify-center">
-                    <button className="px-4 py-1 bg-blue-500 text-white text-xs rounded hover:bg-blue-600">
-                      컨택선택
-                    </button>
+                    <span className="text-xs text-gray-500">
+                      {newContact.연구실명 ? "✓ 선택완료" : "위에서 선택"}
+                    </span>
                   </div>
                 </div>
 
@@ -417,8 +473,9 @@ export default function GraduateContactPage() {
                   <div className="flex justify-center gap-3">
                     <button
                       onClick={handleSaveContact}
-                      className="px-8 py-2 bg-inha-blue text-white font-medium rounded hover:opacity-90 transition-opacity">
-                      저장
+                      disabled={submitContactMutation.isPending}
+                      className="px-8 py-2 bg-inha-blue text-white font-medium rounded hover:opacity-90 transition-opacity disabled:opacity-50">
+                      {submitContactMutation.isPending ? "저장 중..." : "저장"}
                     </button>
                     <button
                       onClick={handleCancelContact}
@@ -437,6 +494,68 @@ export default function GraduateContactPage() {
       {activeTab === "history" && (
         <div>
           <h2 className="text-xl font-bold text-black mb-4">대학원 컨택내역</h2>
+
+          {/* Filters */}
+          <div className="flex items-center gap-3 mb-6">
+            <span className="text-sm font-medium text-black">지원학기</span>
+            <select
+              value={filterSemester}
+              onChange={(e) => setFilterSemester(e.target.value)}
+              className="px-4 py-2 border border-gray-300 rounded-md text-sm text-black bg-white focus:ring-2 focus:ring-inha-blue focus:border-inha-blue">
+              <option value="전체" className="bg-white text-black">
+                전체
+              </option>
+              <option value="20261" className="bg-white text-black">
+                2026-1
+              </option>
+              <option value="20252" className="bg-white text-black">
+                2025-2
+              </option>
+            </select>
+
+            <span className="text-sm font-medium text-black ml-4">
+              개설학과
+            </span>
+            <select
+              value={filterDepartment}
+              onChange={(e) => setFilterDepartment(e.target.value)}
+              className="px-4 py-2 border border-gray-300 rounded-md text-sm text-black bg-white focus:ring-2 focus:ring-inha-blue focus:border-inha-blue">
+              <option value="전체" className="bg-white text-black">
+                전체
+              </option>
+              <option value="컴퓨터공학과" className="bg-white text-black">
+                컴퓨터공학과
+              </option>
+              <option value="전기컴퓨터공학과" className="bg-white text-black">
+                전기컴퓨터공학과
+              </option>
+            </select>
+
+            <span className="text-sm font-medium text-black ml-4">상태</span>
+            <select
+              value={filterStatus}
+              onChange={(e) => setFilterStatus(e.target.value)}
+              className="px-4 py-2 border border-gray-300 rounded-md text-sm text-black bg-white focus:ring-2 focus:ring-inha-blue focus:border-inha-blue">
+              <option value="전체" className="bg-white text-black">
+                전체
+              </option>
+              <option value="대기" className="bg-white text-black">
+                대기중
+              </option>
+              <option value="완료" className="bg-white text-black">
+                승인
+              </option>
+              <option value="거절" className="bg-white text-black">
+                거절
+              </option>
+            </select>
+
+            <button
+              onClick={handleFilterContacts}
+              className="ml-auto px-6 py-2 bg-blue-500 text-white text-sm font-medium rounded hover:bg-blue-600 transition-colors">
+              조회
+            </button>
+          </div>
 
           <div className="border border-gray-300 rounded-md overflow-x-auto">
             <div className="grid grid-cols-[100px_150px_150px_200px_150px_120px] bg-inha-blue text-white min-w-[870px]">
@@ -461,7 +580,11 @@ export default function GraduateContactPage() {
             </div>
 
             <div className="bg-white min-w-[870px]">
-              {contacts.length === 0 ? (
+              {isLoadingContacts ? (
+                <div className="py-12 text-center text-black text-sm">
+                  로딩 중...
+                </div>
+              ) : contacts.length === 0 ? (
                 <div className="py-12 text-center text-black text-sm">
                   조회된 Data가 존재 하지 않습니다
                 </div>
@@ -492,6 +615,8 @@ export default function GraduateContactPage() {
                         className={`px-3 py-1 text-xs font-medium rounded ${
                           contact.컨택신청 === "완료"
                             ? "bg-green-100 text-green-700"
+                            : contact.컨택신청 === "거절"
+                            ? "bg-red-100 text-red-700"
                             : "bg-yellow-100 text-yellow-700"
                         }`}>
                         {contact.컨택신청}
