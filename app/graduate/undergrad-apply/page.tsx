@@ -78,10 +78,10 @@ export default function UndergradApplyPage() {
     <>
       {/* Title and Breadcrumb */}
       <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-800 mb-2">
+        <h1 className="text-2xl font-bold text-black mb-2">
           <span className="text-inha-blue">■</span> 학부연구생 신청
         </h1>
-        <div className="text-sm text-gray-500 mb-4">
+        <div className="text-sm text-black mb-4">
           홈 &gt; 대학원(학적) &gt; 학부연구생 신청
         </div>
         <hr className="border-gray-200" />
@@ -106,12 +106,12 @@ export default function UndergradApplyPage() {
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* 기본 정보 */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <h2 className="text-lg font-bold text-gray-800 mb-4 pb-2 border-b">
+          <h2 className="text-lg font-bold text-black mb-4 pb-2 border-b">
             1. 기본 정보
           </h2>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-black mb-2">
                 <span className="text-red-500">*</span> 이름
               </label>
               <input
@@ -120,12 +120,12 @@ export default function UndergradApplyPage() {
                 value={formData.name}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-inha-blue focus:border-inha-blue"
+                className="w-full px-4 py-2 border border-gray-300 rounded-md text-black bg-white placeholder:text-gray-400 focus:ring-2 focus:ring-inha-blue focus:border-inha-blue"
                 placeholder="홍길동"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-black mb-2">
                 <span className="text-red-500">*</span> 학번
               </label>
               <input
@@ -134,12 +134,12 @@ export default function UndergradApplyPage() {
                 value={formData.studentId}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-inha-blue focus:border-inha-blue"
+                className="w-full px-4 py-2 border border-gray-300 rounded-md text-black bg-white placeholder:text-gray-400 focus:ring-2 focus:ring-inha-blue focus:border-inha-blue"
                 placeholder="12345678"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-black mb-2">
                 <span className="text-red-500">*</span> 소속 학과
               </label>
               <input
@@ -148,12 +148,12 @@ export default function UndergradApplyPage() {
                 value={formData.department}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-inha-blue focus:border-inha-blue"
+                className="w-full px-4 py-2 border border-gray-300 rounded-md text-black bg-white placeholder:text-gray-400 focus:ring-2 focus:ring-inha-blue focus:border-inha-blue"
                 placeholder="컴퓨터공학과"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-black mb-2">
                 <span className="text-red-500">*</span> 학년
               </label>
               <select
@@ -161,15 +161,23 @@ export default function UndergradApplyPage() {
                 value={formData.grade}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-inha-blue focus:border-inha-blue">
-                <option value="">선택하세요</option>
-                <option value="2">2학년</option>
-                <option value="3">3학년</option>
-                <option value="4">4학년</option>
+                className="w-full px-4 py-2 border border-gray-300 rounded-md text-black bg-white focus:ring-2 focus:ring-inha-blue focus:border-inha-blue">
+                <option value="" className="bg-white text-black">
+                  선택하세요
+                </option>
+                <option value="2" className="bg-white text-black">
+                  2학년
+                </option>
+                <option value="3" className="bg-white text-black">
+                  3학년
+                </option>
+                <option value="4" className="bg-white text-black">
+                  4학년
+                </option>
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-black mb-2">
                 <span className="text-red-500">*</span> 연락처
               </label>
               <input
@@ -178,12 +186,12 @@ export default function UndergradApplyPage() {
                 value={formData.phone}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-inha-blue focus:border-inha-blue"
+                className="w-full px-4 py-2 border border-gray-300 rounded-md text-black bg-white placeholder:text-gray-400 focus:ring-2 focus:ring-inha-blue focus:border-inha-blue"
                 placeholder="010-1234-5678"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-black mb-2">
                 <span className="text-red-500">*</span> 이메일
               </label>
               <input
@@ -192,12 +200,12 @@ export default function UndergradApplyPage() {
                 value={formData.email}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-inha-blue focus:border-inha-blue"
+                className="w-full px-4 py-2 border border-gray-300 rounded-md text-black bg-white placeholder:text-gray-400 focus:ring-2 focus:ring-inha-blue focus:border-inha-blue"
                 placeholder="example@inha.edu"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-black mb-2">
                 <span className="text-red-500">*</span> 평점 (GPA)
               </label>
               <input
@@ -207,12 +215,12 @@ export default function UndergradApplyPage() {
                 onChange={handleChange}
                 required
                 pattern="[0-4](\.[0-9]{1,2})?"
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-inha-blue focus:border-inha-blue"
+                className="w-full px-4 py-2 border border-gray-300 rounded-md text-black bg-white placeholder:text-gray-400 focus:ring-2 focus:ring-inha-blue focus:border-inha-blue"
                 placeholder="3.50 (4.5 만점)"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-black mb-2">
                 <span className="text-red-500">*</span> 신청 학기
               </label>
               <select
@@ -220,10 +228,16 @@ export default function UndergradApplyPage() {
                 value={formData.yearSemester}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-inha-blue focus:border-inha-blue">
-                <option value="20253">2025-3학기 (여름학기)</option>
-                <option value="20252">2025-2학기</option>
-                <option value="20251">2025-1학기</option>
+                className="w-full px-4 py-2 border border-gray-300 rounded-md text-black bg-white focus:ring-2 focus:ring-inha-blue focus:border-inha-blue">
+                <option value="20253" className="bg-white text-black">
+                  2025-3학기 (여름학기)
+                </option>
+                <option value="20252" className="bg-white text-black">
+                  2025-2학기
+                </option>
+                <option value="20251" className="bg-white text-black">
+                  2025-1학기
+                </option>
               </select>
             </div>
           </div>
@@ -231,12 +245,12 @@ export default function UndergradApplyPage() {
 
         {/* 연구실 정보 */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <h2 className="text-lg font-bold text-gray-800 mb-4 pb-2 border-b">
+          <h2 className="text-lg font-bold text-black mb-4 pb-2 border-b">
             2. 연구실 정보
           </h2>
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-black mb-2">
                 <span className="text-red-500">*</span> 희망 연구실명
               </label>
               <input
@@ -245,7 +259,7 @@ export default function UndergradApplyPage() {
                 value={formData.preferredLab}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-inha-blue focus:border-inha-blue"
+                className="w-full px-4 py-2 border border-gray-300 rounded-md text-black bg-white placeholder:text-gray-400 focus:ring-2 focus:ring-inha-blue focus:border-inha-blue"
                 placeholder="예) 조합적 알고리즘 연구실"
               />
               <p className="text-xs text-gray-500 mt-1">
@@ -253,7 +267,7 @@ export default function UndergradApplyPage() {
               </p>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-black mb-2">
                 <span className="text-red-500">*</span> 지도교수명
               </label>
               <input
@@ -262,7 +276,7 @@ export default function UndergradApplyPage() {
                 value={formData.professor}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-inha-blue focus:border-inha-blue"
+                className="w-full px-4 py-2 border border-gray-300 rounded-md text-black bg-white placeholder:text-gray-400 focus:ring-2 focus:ring-inha-blue focus:border-inha-blue"
                 placeholder="예) 안정호"
               />
             </div>
@@ -271,12 +285,12 @@ export default function UndergradApplyPage() {
 
         {/* 신청 동기 및 계획 */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <h2 className="text-lg font-bold text-gray-800 mb-4 pb-2 border-b">
+          <h2 className="text-lg font-bold text-black mb-4 pb-2 border-b">
             3. 신청 동기 및 계획
           </h2>
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-black mb-2">
                 <span className="text-red-500">*</span> 지원 동기 (500자 이내)
               </label>
               <textarea
@@ -286,14 +300,14 @@ export default function UndergradApplyPage() {
                 required
                 maxLength={500}
                 rows={5}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-inha-blue focus:border-inha-blue resize-none"
+                className="w-full px-4 py-2 border border-gray-300 rounded-md text-black bg-white placeholder:text-gray-400 focus:ring-2 focus:ring-inha-blue focus:border-inha-blue resize-none"
                 placeholder="해당 연구실에 지원하게 된 동기를 작성해주세요."></textarea>
               <div className="text-right text-xs text-gray-500 mt-1">
                 {formData.motivation.length} / 500자
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-black mb-2">
                 관련 경험 및 프로젝트 (선택)
               </label>
               <textarea
@@ -302,14 +316,14 @@ export default function UndergradApplyPage() {
                 onChange={handleChange}
                 maxLength={500}
                 rows={5}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-inha-blue focus:border-inha-blue resize-none"
+                className="w-full px-4 py-2 border border-gray-300 rounded-md text-black bg-white placeholder:text-gray-400 focus:ring-2 focus:ring-inha-blue focus:border-inha-blue resize-none"
                 placeholder="관련 수업, 프로젝트, 동아리 활동 등의 경험이 있다면 작성해주세요."></textarea>
               <div className="text-right text-xs text-gray-500 mt-1">
                 {formData.experience.length} / 500자
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium text-black mb-2">
                 <span className="text-red-500">*</span> 관심 연구 분야 (300자
                 이내)
               </label>
@@ -320,7 +334,7 @@ export default function UndergradApplyPage() {
                 required
                 maxLength={300}
                 rows={4}
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-inha-blue focus:border-inha-blue resize-none"
+                className="w-full px-4 py-2 border border-gray-300 rounded-md text-black bg-white placeholder:text-gray-400 focus:ring-2 focus:ring-inha-blue focus:border-inha-blue resize-none"
                 placeholder="관심 있는 연구 주제나 배우고 싶은 내용을 작성해주세요."></textarea>
               <div className="text-right text-xs text-gray-500 mt-1">
                 {formData.interests.length} / 300자
@@ -337,7 +351,7 @@ export default function UndergradApplyPage() {
               required
               className="mt-1 w-4 h-4 text-inha-blue border-gray-300 rounded focus:ring-inha-blue"
             />
-            <span className="text-sm text-gray-700">
+            <span className="text-sm text-black">
               <span className="text-red-500">*</span> 개인정보 수집 및 이용에
               동의합니다.
               <span className="text-xs text-gray-500 block mt-1">
