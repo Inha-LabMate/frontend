@@ -33,6 +33,131 @@ body {
   font-family: var(--font-malgun), Arial, Helvetica, sans-serif;
 }
 
+/* 기본 텍스트 색상을 검정색으로 설정 */
+* {
+  color: black;
+}
+
+/* 배경색이 있는 요소는 적절한 텍스트 색상 설정 */
+/* 어두운 배경 - 흰색 텍스트 (자식 요소 포함) - !important로 강제 적용 */
+.bg-inha-blue,
+.bg-inha-blue *:not(input):not(select):not(textarea),
+.bg-blue-500,
+.bg-blue-500 *:not(input):not(select):not(textarea),
+.bg-blue-600,
+.bg-blue-600 *:not(input):not(select):not(textarea),
+.bg-blue-700,
+.bg-blue-700 *:not(input):not(select):not(textarea),
+.bg-blue-800,
+.bg-blue-800 *:not(input):not(select):not(textarea),
+.bg-blue-900,
+.bg-blue-900 *:not(input):not(select):not(textarea),
+.bg-red-500,
+.bg-red-500 *:not(input):not(select):not(textarea),
+.bg-red-600,
+.bg-red-600 *:not(input):not(select):not(textarea),
+.bg-red-700,
+.bg-red-700 *:not(input):not(select):not(textarea),
+.bg-red-800,
+.bg-red-800 *:not(input):not(select):not(textarea),
+.bg-red-900,
+.bg-red-900 *:not(input):not(select):not(textarea),
+.bg-green-500,
+.bg-green-500 *:not(input):not(select):not(textarea),
+.bg-green-600,
+.bg-green-600 *:not(input):not(select):not(textarea),
+.bg-green-700,
+.bg-green-700 *:not(input):not(select):not(textarea),
+.bg-green-800,
+.bg-green-800 *:not(input):not(select):not(textarea),
+.bg-green-900,
+.bg-green-900 *:not(input):not(select):not(textarea),
+.bg-yellow-600,
+.bg-yellow-600 *:not(input):not(select):not(textarea),
+.bg-yellow-700,
+.bg-yellow-700 *:not(input):not(select):not(textarea),
+.bg-yellow-800,
+.bg-yellow-800 *:not(input):not(select):not(textarea),
+.bg-yellow-900,
+.bg-yellow-900 *:not(input):not(select):not(textarea),
+.bg-gray-700,
+.bg-gray-700 *:not(input):not(select):not(textarea),
+.bg-gray-800,
+.bg-gray-800 *:not(input):not(select):not(textarea),
+.bg-gray-900,
+.bg-gray-900 *:not(input):not(select):not(textarea),
+.bg-gray-600,
+.bg-gray-600 *:not(input):not(select):not(textarea),
+.bg-gray-500,
+.bg-gray-500 *:not(input):not(select):not(textarea),
+.bg-black,
+.bg-black *:not(input):not(select):not(textarea) {
+  color: white !important;
+}
+
+/* hover 상태의 어두운 배경도 흰색 텍스트 */
+.hover\:bg-inha-blue:hover,
+.hover\:bg-inha-blue:hover *:not(input):not(select):not(textarea),
+.hover\:bg-blue-600:hover,
+.hover\:bg-blue-600:hover *:not(input):not(select):not(textarea),
+.hover\:bg-blue-700:hover,
+.hover\:bg-blue-700:hover *:not(input):not(select):not(textarea),
+.hover\:bg-gray-700:hover,
+.hover\:bg-gray-700:hover *:not(input):not(select):not(textarea) {
+  color: white !important;
+}
+
+/* 흰색/밝은 배경 - 검정색 텍스트 (자식 요소 포함) */
+.bg-white,
+.bg-white *:not(.text-white):not(.text-inha-blue):not(.text-red-500):not(.text-blue-500):not(.text-green-500):not(.text-yellow-500),
+.bg-gray-50,
+.bg-gray-50 *:not(.text-white):not(.text-inha-blue):not(.text-red-500):not(.text-blue-500):not(.text-green-500):not(.text-yellow-500),
+.bg-gray-100,
+.bg-gray-100 *:not(.text-white):not(.text-inha-blue):not(.text-red-500):not(.text-blue-500):not(.text-green-500):not(.text-yellow-500),
+.bg-gray-200,
+.bg-gray-200 *:not(.text-white):not(.text-inha-blue):not(.text-red-500):not(.text-blue-500):not(.text-green-500):not(.text-yellow-500),
+.bg-gray-300,
+.bg-gray-300 *:not(.text-white):not(.text-inha-blue):not(.text-red-500):not(.text-blue-500):not(.text-green-500):not(.text-yellow-500),
+.bg-blue-50,
+.bg-blue-50 *:not(.text-white):not(.text-inha-blue):not(.text-red-500):not(.text-blue-500):not(.text-green-500):not(.text-yellow-500),
+.bg-blue-100,
+.bg-blue-100 *:not(.text-white):not(.text-inha-blue):not(.text-red-500):not(.text-blue-500):not(.text-green-500):not(.text-yellow-500),
+.bg-green-50,
+.bg-green-50 *:not(.text-white):not(.text-inha-blue):not(.text-red-500):not(.text-blue-500):not(.text-green-500):not(.text-yellow-500),
+.bg-green-100,
+.bg-green-100 *:not(.text-white):not(.text-inha-blue):not(.text-red-500):not(.text-blue-500):not(.text-green-500):not(.text-yellow-500),
+.bg-yellow-50,
+.bg-yellow-50 *:not(.text-white):not(.text-inha-blue):not(.text-red-500):not(.text-blue-500):not(.text-green-500):not(.text-yellow-500),
+.bg-yellow-100,
+.bg-yellow-100 *:not(.text-white):not(.text-inha-blue):not(.text-red-500):not(.text-blue-500):not(.text-green-500):not(.text-yellow-500),
+.bg-red-50,
+.bg-red-50 *:not(.text-white):not(.text-inha-blue):not(.text-red-500):not(.text-blue-500):not(.text-green-500):not(.text-yellow-500),
+.bg-red-100,
+.bg-red-100 *:not(.text-white):not(.text-inha-blue):not(.text-red-500):not(.text-blue-500):not(.text-green-500):not(.text-yellow-500) {
+  color: black !important;
+}
+
+/* 특정 요소는 원래 색상 유지 */
+.text-white,
+.text-inha-blue,
+.text-red-500,
+.text-blue-500,
+.text-blue-600,
+.text-blue-700,
+.text-blue-800,
+.text-blue-900,
+.text-green-500,
+.text-green-600,
+.text-green-700,
+.text-yellow-500,
+.text-yellow-600,
+.text-yellow-700,
+.text-gray-400,
+.text-gray-500,
+.text-gray-600 {
+  color: inherit !important;
+}
+
 /* Input, Select, Textarea 기본 색상 설정 */
 input,
 select,

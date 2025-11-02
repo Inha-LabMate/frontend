@@ -20,16 +20,16 @@ export default function Section({
     <div className="mb-6">
       {/* Section Header */}
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-bold text-gray-800 flex items-center gap-2">
-          <span className="w-8 h-8 bg-inha-blue rounded-full flex items-center justify-center">
-            <span className="text-white text-sm">{icon}</span>
+        <h2 className="text-lg font-bold text-black flex items-center gap-2">
+          <span className="w-8 h-8 bg-inha-blue rounded-full flex items-center justify-center shadow-md">
+            <span className="text-white text-sm font-bold">{icon}</span>
           </span>
           {title}
         </h2>
         {onAdd && (
           <button
             onClick={onAdd}
-            className="w-8 h-8 bg-inha-blue text-white rounded flex items-center justify-center hover:opacity-90 transition-opacity text-xl"
+            className="w-8 h-8 bg-inha-blue text-white rounded flex items-center justify-center hover:bg-blue-700 transition-all shadow-md hover:shadow-lg text-xl font-bold"
             title="추가">
             +
           </button>

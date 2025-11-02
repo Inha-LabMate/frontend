@@ -41,19 +41,19 @@ export default function CoverLetterTab() {
       </div>
 
       {/* Cover Letter Section */}
-      <div className="border border-gray-300 rounded-lg overflow-hidden">
-        <div className="bg-inha-blue text-white px-6 py-4 flex items-center gap-2">
-          <span className="w-8 h-8 bg-white rounded-full flex items-center justify-center">
-            <span className="text-inha-blue text-sm">▶</span>
+      <div className="border border-gray-300 rounded-lg overflow-hidden shadow-md">
+        <div className="bg-inha-blue text-white px-6 py-4 flex items-center gap-2 shadow-sm">
+          <span className="w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-md">
+            <span className="text-inha-blue text-sm font-bold">▶</span>
           </span>
-          <h2 className="text-lg font-bold">자기소개서 작성</h2>
+          <h2 className="text-lg font-bold text-white">자기소개서 작성</h2>
         </div>
 
         <div className="p-6 space-y-8">
           {/* Question 1 */}
           <div>
             <div className="flex items-start gap-4 mb-2">
-              <span className="bg-gray-100 px-4 py-2 text-gray-700 font-medium whitespace-nowrap">
+              <span className="bg-gray-100 px-4 py-2 text-black font-medium whitespace-nowrap">
                 문항 1
               </span>
               <textarea
@@ -74,7 +74,7 @@ export default function CoverLetterTab() {
           {/* Question 2 */}
           <div>
             <div className="flex items-start gap-4 mb-2">
-              <span className="bg-gray-100 px-4 py-2 text-gray-700 font-medium whitespace-nowrap">
+              <span className="bg-gray-100 px-4 py-2 text-black font-medium whitespace-nowrap">
                 문항 2
               </span>
               <textarea
@@ -95,7 +95,7 @@ export default function CoverLetterTab() {
           {/* Question 3 */}
           <div>
             <div className="flex items-start gap-4 mb-2">
-              <span className="bg-gray-100 px-4 py-2 text-gray-700 font-medium whitespace-nowrap">
+              <span className="bg-gray-100 px-4 py-2 text-black font-medium whitespace-nowrap">
                 문항 3
               </span>
               <textarea

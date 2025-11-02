@@ -37,10 +37,10 @@ export default function ResearchLabTabs() {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`px-8 py-3 text-sm font-medium transition-colors relative ${
+            className={`px-8 py-3 text-sm font-medium transition-all relative shadow-sm ${
               activeTab === tab.id
-                ? "bg-inha-blue text-white"
-                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                ? "bg-inha-blue text-white font-bold shadow-md"
+                : "bg-gray-100 text-black hover:bg-gray-200 hover:text-inha-blue"
             }`}>
             {tab.label}
           </button>
