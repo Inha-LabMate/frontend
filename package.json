@@ -16,6 +16,7 @@
     "cheerio": "^1.1.2",
     "dotenv": "^17.2.3",
     "googleapis": "^164.1.0",
+    "i18nexus": "^2.7.0",
     "next": "15.5.4",
     "pdfjs-dist": "^5.4.296",
     "react": "19.1.0",
@@ -30,6 +31,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.5.4",
+    "i18nexus-tools": "^1.5.7",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

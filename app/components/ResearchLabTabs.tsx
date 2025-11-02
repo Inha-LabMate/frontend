@@ -1,4 +1,4 @@
-"use client";
+"use client";import { useTranslation } from "i18nexus";
 
 import { useState } from "react";
 import UndergradResearchTable from "./UndergradResearchTable";
@@ -7,14 +7,14 @@ import AIRecommendation from "./AIRecommendation";
 
 type TabType = "undergrad" | "graduate" | "ai";
 
-export default function ResearchLabTabs() {
+export default function ResearchLabTabs() {const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<TabType>("undergrad");
 
   const tabs = [
-    { id: "undergrad" as TabType, label: "학부연구생" },
-    { id: "graduate" as TabType, label: "대학원" },
-    { id: "ai" as TabType, label: "AI 연구실 추천" },
-  ];
+  { id: "undergrad" as TabType, label: t("학부연구생") },
+  { id: "graduate" as TabType, label: t("대학원") },
+  { id: "ai" as TabType, label: t("AI 연구실 추천") }];
+
 
   const renderContent = () => {
     switch (activeTab) {
@@ -33,22 +33,22 @@ export default function ResearchLabTabs() {
     <div className="w-full">
       {/* Tab Navigation */}
       <div className="flex border-b border-gray-200 mb-6">
-        {tabs.map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={`px-8 py-3 text-sm font-medium transition-all relative shadow-sm ${
-              activeTab === tab.id
-                ? "bg-inha-blue text-white font-bold shadow-md"
-                : "bg-gray-100 text-black hover:bg-gray-200 hover:text-inha-blue"
-            }`}>
-            {tab.label}
+        {tabs.map((tab) =>
+        <button
+          key={tab.id}
+          onClick={() => setActiveTab(tab.id)}
+          className={`px-8 py-3 text-sm font-medium transition-all relative shadow-sm ${
+          activeTab === tab.id ?
+          "bg-inha-blue text-white font-bold shadow-md" :
+          "bg-gray-100 text-black hover:bg-gray-200 hover:text-inha-blue"}`
+          }>
+            {t(tab.label)}
           </button>
-        ))}
+        )}
       </div>
 
       {/* Tab Content */}
       <div className="w-full">{renderContent()}</div>
-    </div>
-  );
+    </div>);
+
 }

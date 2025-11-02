@@ -1,4 +1,4 @@
-"use client";
+"use client";import { useTranslation } from "i18nexus";
 
 import { ReactNode } from "react";
 
@@ -9,7 +9,7 @@ interface ModalProps {
   children: ReactNode;
 }
 
-export default function Modal({ isOpen, title, children }: ModalProps) {
+export default function Modal({ isOpen, title, children }: ModalProps) {const { t } = useTranslation();
   if (!isOpen) return null;
 
   return (
@@ -26,13 +26,13 @@ export default function Modal({ isOpen, title, children }: ModalProps) {
         </div>
 
         {/* Required Field Notice */}
-        <div className="px-6 py-2 text-right text-xs text-red-500 bg-red-50">
-          *필수는 필수입력 항목입니다.
+        <div className="px-6 py-2 text-right text-xs text-red-500 bg-red-50">{t("*필수는 필수입력 항목입니다.")}
+
         </div>
 
         {/* Modal Content */}
         <div className="px-6 py-4">{children}</div>
       </div>
-    </div>
-  );
+    </div>);
+
 }
