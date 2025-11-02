@@ -1,7 +1,8 @@
 // 대학원 컨택 API
 // URL만 수정하면 실제 API와 연동 가능
 
-const API_BASE_URL = "/api"; // 실제 API URL로 변경 가능
+// 실제 API 연동 시 사용
+// const API_BASE_URL = "/api"; // 실제 API URL로 변경 가능
 
 export interface ApiContactLab {
   [key: string]: string | number | boolean;
@@ -157,13 +158,14 @@ export const getContactRecords = async (params?: {
 
 // 컨택 신청
 export const submitContact = async (
-  data: Record<string, unknown>
+  _data: Record<string, unknown>
 ): Promise<{ success: boolean; message: string }> => {
   // 실제 API 호출
+  // const API_BASE_URL = "/api";
   // const response = await fetch(`${API_BASE_URL}/contact/submit`, {
   //   method: 'POST',
   //   headers: { 'Content-Type': 'application/json' },
-  //   body: JSON.stringify(data),
+  //   body: JSON.stringify(_data),
   // });
   // return response.json();
 

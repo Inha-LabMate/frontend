@@ -1,10 +1,10 @@
 /**
  * Resume React Query Hooks
+ * API에서 받은 JSON 데이터를 그대로 사용 (Adapter 제거)
  */
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { resumeApi } from "../api/resume.api";
-import { adaptResume } from "../adapters/resume.adapter";
 import type {
   ApiLanguage,
   ApiCertificate,
@@ -16,13 +16,15 @@ import type {
 
 /**
  * 이력서 전체 조회
+ * API URL만 변경하면 됨: resumeApi.getResume() 내부
  */
 export const useResume = () => {
   return useQuery({
     queryKey: ["resume"],
     queryFn: async () => {
+      // Adapter 제거 - API 데이터 그대로 사용
       const data = await resumeApi.getResume();
-      return adaptResume(data);
+      return data;
     },
     staleTime: 1000 * 60 * 5,
   });

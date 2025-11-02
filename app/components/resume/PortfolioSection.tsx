@@ -55,7 +55,7 @@ export default function PortfolioSection({ data }: Props) {
             const page = await pdf.getPage(i);
             const textContent = await page.getTextContent();
             const pageText = textContent.items
-              .map((item: any) => item.str)
+              .map((item) => ('str' in item ? item.str : ''))
               .join(' ');
             
             if (pageText.trim()) {
@@ -390,7 +390,7 @@ export default function PortfolioSection({ data }: Props) {
                     </button>
                   </div>
                   <div className="text-xs text-gray-500 bg-blue-50 p-2 rounded">
-                    💡 노션 페이지 공유 방법: 페이지 우측 상단 "공유" → "웹에 게시" 클릭 후 링크 복사
+                    💡 노션 페이지 공유 방법: 페이지 우측 상단 &quot;공유&quot; → &quot;웹에 게시&quot; 클릭 후 링크 복사
                   </div>
                 </div>
               )}

@@ -1,7 +1,8 @@
 // 강의진단 결과 API
 // URL만 수정하면 실제 API와 연동 가능
 
-const API_BASE_URL = "/api"; // 실제 API URL로 변경 가능
+// 실제 API 연동 시 사용
+// const API_BASE_URL = "/api"; // 실제 API URL로 변경 가능
 
 export interface ApiDiagnosisResult {
   [key: string]: string | number | boolean;

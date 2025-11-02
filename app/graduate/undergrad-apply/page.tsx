@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useSubmitApplication } from "@/lib/hooks/useUndergradApply";
 
-interface ApplicationForm {
+interface ApplicationForm extends Record<string, string> {
   name: string;
   studentId: string;
   department: string;

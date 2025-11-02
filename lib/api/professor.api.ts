@@ -1,7 +1,8 @@
 // 교수 정보 API
 // URL만 수정하면 실제 API와 연동 가능
 
-const API_BASE_URL = "/api"; // 실제 API URL로 변경 가능
+// 실제 API 연동 시 사용
+// const API_BASE_URL = "/api"; // 실제 API URL로 변경 가능
 
 export interface ApiProfessorInfo {
   [key: string]: string | number | boolean | string[];
@@ -44,7 +45,7 @@ export const getProfessorInfo = async (): Promise<ApiProfessorInfo> => {
 };
 
 // 상담 신청
-export const requestCounseling = async (data: {
+export const requestCounseling = async (_data: {
   studentName: string;
   studentId: string;
   topic: string;
@@ -52,10 +53,11 @@ export const requestCounseling = async (data: {
   preferredDate: string;
 }): Promise<{ success: boolean; message: string }> => {
   // 실제 API 호출
+  // const API_BASE_URL = "/api";
   // const response = await fetch(`${API_BASE_URL}/professor/counseling`, {
   //   method: 'POST',
   //   headers: { 'Content-Type': 'application/json' },
-  //   body: JSON.stringify(data),
+  //   body: JSON.stringify(_data),
   // });
   // return response.json();
 
