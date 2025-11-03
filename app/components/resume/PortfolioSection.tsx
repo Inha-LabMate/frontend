@@ -149,7 +149,7 @@ export default function PortfolioSection({ data }: Props) {
   return (
     <>
       <Section
-        title={t("기타정부파일(포트폴리오)")}
+        title={t("기타첨부파일(포트폴리오)")}
         icon="▶"
         onAdd={() => setIsModalOpen(true)}>
         {data.length === 0 ? (
@@ -227,7 +227,7 @@ export default function PortfolioSection({ data }: Props) {
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        title={t("기타정부파일(포트폴리오)")}>
+        title={t("기타첨부파일(포트폴리오)")}>
         <div className="space-y-6">
           {/* 포트폴리오명 */}
           <div className="flex items-center gap-4">
