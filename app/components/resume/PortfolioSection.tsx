@@ -24,14 +24,12 @@ export default function PortfolioSection({ data }: Props) {
   const [formData, setFormData] = useState({
     type: "",
     content: "",
-    fileUrl: "",
     fileName: "",
-    sourceType: "pdf" as "pdf" | "notion",
   });
 
   const [isExtracting, setIsExtracting] = useState(false);
 
-  // PDF 텍스트 추출 함수 (실제 PDF.js 사용)
+  // PDF 텍스트 추출 함수 - 깔끔한 텍스트만 출력
   const extractTextFromPDF = async (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -43,17 +41,16 @@ export default function PortfolioSection({ data }: Props) {
           // PDF.js 동적 import
           const pdfjsLib = await import("pdfjs-dist");
 
-          // Worker 설정 - HTTPS 명시적으로 사용
-          pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
+          // Worker 설정 - npm 패키지의 로컬 worker 사용
+          pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
+            "pdfjs-dist/build/pdf.worker.min.mjs",
+            import.meta.url
+          ).toString();
 
           // PDF 로드
           const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
 
-          let fullText = t(
-            "[PDF에서 추출된 텍스트]\\n\\n파일명: {{file_name}}\\n페이지 수: {{pdf_numPages}}페이지\\n\\n",
-            { file_name: file.name, pdf_numPages: pdf.numPages }
-          );
-          fullText += "=".repeat(50) + "\n\n";
+          let fullText = "";
 
           // 모든 페이지에서 텍스트 추출
           for (let i = 1; i <= pdf.numPages; i++) {
@@ -64,16 +61,11 @@ export default function PortfolioSection({ data }: Props) {
               .join(" ");
 
             if (pageText.trim()) {
-              fullText += t("\\n[페이지 {{i}}]\\n{{pageText}}\\n", {
-                i: i,
-                pageText: pageText,
-              });
+              fullText += pageText + "\n\n";
             }
           }
 
-          fullText += "\n" + "=".repeat(50);
-
-          resolve(fullText);
+          resolve(fullText.trim());
         } catch (error) {
           console.error(t("PDF 파싱 오류:"), error);
           reject(new Error(t("PDF 텍스트 추출에 실패했습니다.")));
@@ -86,30 +78,6 @@ export default function PortfolioSection({ data }: Props) {
 
       reader.readAsArrayBuffer(file);
     });
-  };
-
-  // 노션 링크에서 텍스트 추출 (실제 API 호출)
-  const extractTextFromNotion = async (notionUrl: string): Promise<string> => {
-    try {
-      const response = await fetch("/api/extract-notion", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ notionUrl }),
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || t("노션 텍스트 추출에 실패했습니다."));
-      }
-
-      const data = await response.json();
-      return data.text;
-    } catch (error) {
-      console.error(t("노션 API 호출 오류:"), error);
-      throw error;
-    }
   };
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -140,8 +108,6 @@ export default function PortfolioSection({ data }: Props) {
         ...formData,
         content: extractedText,
         fileName: file.name,
-        fileUrl: URL.createObjectURL(file),
-        sourceType: "pdf",
       });
       alert(t("✅ PDF에서 텍스트를 성공적으로 추출했습니다!"));
     } catch (error) {
@@ -159,43 +125,6 @@ export default function PortfolioSection({ data }: Props) {
     }
   };
 
-  const handleNotionLinkExtract = async () => {
-    if (!formData.fileUrl) {
-      alert(t("노션 링크를 입력해주세요."));
-      return;
-    }
-
-    if (!formData.fileUrl.includes("notion.")) {
-      alert(t("올바른 노션 링크를 입력해주세요.\n예시: https://notion.so/..."));
-      return;
-    }
-
-    setIsExtracting(true);
-    try {
-      const extractedText = await extractTextFromNotion(formData.fileUrl);
-      setFormData({
-        ...formData,
-        content: extractedText,
-        sourceType: "notion",
-      });
-      alert(t("✅ 노션 페이지에서 텍스트를 성공적으로 추출했습니다!"));
-    } catch (error) {
-      console.error(t("노션 텍스트 추출 실패:"), error);
-      const errorMessage =
-        error instanceof Error
-          ? error.message
-          : t("노션 텍스트 추출에 실패했습니다.");
-      alert(
-        t(
-          "❌ {{errorMessage}}\\n\\n💡 노션 페이지가 공개 설정되어 있는지 확인해주세요.",
-          { errorMessage: errorMessage }
-        )
-      );
-    } finally {
-      setIsExtracting(false);
-    }
-  };
-
   const handleAdd = () => {
     if (!formData.type || !formData.content) {
       alert(t("필수 항목을 모두 입력해주세요."));
@@ -208,9 +137,7 @@ export default function PortfolioSection({ data }: Props) {
         setFormData({
           type: "",
           content: "",
-          fileUrl: "",
           fileName: "",
-          sourceType: "pdf",
         });
         if (fileInputRef.current) {
           fileInputRef.current.value = "";
@@ -348,29 +275,6 @@ export default function PortfolioSection({ data }: Props) {
             </div>
           </div>
 
-          {/* 노션 링크 */}
-          <div className="flex items-center gap-4">
-            <label className="w-32 text-sm text-black">{t("노션 링크")}</label>
-            <div className="flex-1 flex gap-2">
-              <input
-                type="url"
-                value={formData.fileUrl}
-                onChange={(e) =>
-                  setFormData({ ...formData, fileUrl: e.target.value })
-                }
-                placeholder="https://notion.so/..."
-                className="flex-1 px-3 py-2 border border-gray-300 rounded bg-white text-black text-sm focus:ring-2 focus:ring-inha-blue focus:border-transparent"
-              />
-
-              <button
-                onClick={handleNotionLinkExtract}
-                disabled={isExtracting || !formData.fileUrl}
-                className="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition-colors whitespace-nowrap text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed">
-                {t("텍스트 추출")}
-              </button>
-            </div>
-          </div>
-
           {/* 추출 상태 표시 */}
           {isExtracting && (
             <div className="flex items-center gap-4">
@@ -378,7 +282,7 @@ export default function PortfolioSection({ data }: Props) {
               <div className="flex-1 bg-blue-50 border border-blue-200 rounded p-3 flex items-center gap-3">
                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-inha-blue"></div>
                 <span className="text-sm text-gray-700">
-                  {t("텍스트를 추출하고 있습니다...")}
+                  {t("PDF에서 텍스트를 추출하고 있습니다...")}
                 </span>
               </div>
             </div>
@@ -399,7 +303,7 @@ export default function PortfolioSection({ data }: Props) {
                 rows={12}
                 className="w-full px-3 py-2 border border-gray-300 rounded resize-none text-black bg-white text-sm focus:ring-2 focus:ring-inha-blue focus:border-transparent"
                 placeholder={t(
-                  "PDF 업로드 또는 노션 링크에서 자동으로 추출되거나, 직접 입력할 수 있습니다."
+                  "PDF 업로드에서 자동으로 추출되거나, 직접 입력할 수 있습니다."
                 )}
               />
 
@@ -424,9 +328,7 @@ export default function PortfolioSection({ data }: Props) {
               setFormData({
                 type: "",
                 content: "",
-                fileUrl: "",
                 fileName: "",
-                sourceType: "pdf",
               });
               if (fileInputRef.current) {
                 fileInputRef.current.value = "";
