@@ -1,0 +1,12 @@
+{
+  "languages": ["en", "ko"],
+  "defaultLanguage": "ko",
+  "localesDir": "./locales",
+  "sourcePattern": "app/**/*.{js,jsx,ts,tsx}",
+  "translationImportSource": "i18nexus",
+  "googleSheets": {
+    "spreadsheetId": "1nm30phnB7QxLPAWKTmkGh5vZnwo24GzdMu1aIpRDTmY",
+    "credentialsPath": "./scripts/credential.json",
+    "sheetName": "번역"
+  }
+}
