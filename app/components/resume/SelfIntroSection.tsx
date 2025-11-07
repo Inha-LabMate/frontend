@@ -15,11 +15,19 @@ export default function SelfIntroSection() {
   const [formData, setFormData] = useState<SelfIntroData>(getEmptySelfIntro());
   const [isSaved, setIsSaved] = useState(false);
   const [showSaveAlert, setShowSaveAlert] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
 
   // 컴포넌트 마운트 시 로컬스토리지에서 데이터 불러오기
   useEffect(() => {
-    const savedData = getSelfIntroFromStorage();
-    setFormData(savedData);
+    try {
+      console.log("📂 자기소개서 불러오기 시작...");
+      const savedData = getSelfIntroFromStorage();
+      setFormData(savedData);
+      console.log("✅ 자기소개서 불러오기 완료:", savedData);
+    } catch (error) {
+      console.error("❌ 자기소개서 불러오기 중 오류:", error);
+    }
   }, []);
 
   const handleChange = (
@@ -36,22 +44,57 @@ export default function SelfIntroSection() {
   };
 
   const handleSave = () => {
-    saveSelfIntroToStorage(formData);
-    setIsSaved(true);
-    setShowSaveAlert(true);
+    setIsSaving(true);
+    setSaveError(null);
 
-    // 2초 후 저장 상태 초기화
-    setTimeout(() => setIsSaved(false), 2000);
+    try {
+      console.log("💾 저장 시작...", formData);
+      const success = saveSelfIntroToStorage(formData);
 
-    // 3초 후 알림 메시지 숨김
-    setTimeout(() => setShowSaveAlert(false), 3000);
+      if (success) {
+        setIsSaved(true);
+        setShowSaveAlert(true);
+        console.log("✅ 저장 완료!");
+
+        // 저장 후 다시 불러와서 확인
+        const verified = getSelfIntroFromStorage();
+        console.log("🔍 저장 검증:", verified);
+
+        if (!verified) {
+          console.error("❌ 저장 검증 실패!");
+          setSaveError("저장 검증에 실패했습니다.");
+        }
+      } else {
+        console.error("❌ 저장 실패!");
+        setSaveError("저장에 실패했습니다.");
+        alert("저장에 실패했습니다. 콘솔을 확인해주세요.");
+      }
+
+      // 2초 후 저장 상태 초기화
+      setTimeout(() => setIsSaved(false), 2000);
+
+      // 3초 후 알림 메시지 숨김
+      setTimeout(() => setShowSaveAlert(false), 3000);
+    } catch (error) {
+      console.error("❌ 저장 중 오류 발생:", error);
+      setSaveError("저장 중 오류가 발생했습니다.");
+      alert("저장 중 오류가 발생했습니다.");
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const handleReset = () => {
     if (confirm("자기소개서 데이터를 모두 삭제하시겠습니까?")) {
-      deleteSelfIntroFromStorage();
-      setFormData(getEmptySelfIntro());
-      setIsSaved(false);
+      const success = deleteSelfIntroFromStorage();
+      if (success) {
+        setFormData(getEmptySelfIntro());
+        setIsSaved(false);
+        console.log("✅ 초기화 완료!");
+      } else {
+        console.error("❌ 초기화 실패!");
+        alert("초기화에 실패했습니다.");
+      }
     }
   };
 
@@ -291,6 +334,37 @@ export default function SelfIntroSection() {
           </div>
         </div>
       </div>
+
+      {/* 버튼 그룹 */}
+      <div className="flex justify-end gap-3 mt-6">
+        <button
+          type="button"
+          onClick={handleReset}
+          disabled={isSaving}
+          className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+          초기화
+        </button>
+        <button
+          type="button"
+          onClick={handleSave}
+          disabled={isSaving}
+          className={`px-6 py-2 rounded-lg transition-colors disabled:cursor-not-allowed ${
+            isSaving
+              ? "bg-gray-400 text-white cursor-wait"
+              : isSaved
+              ? "bg-green-500 text-white"
+              : "bg-inha-blue text-white hover:bg-blue-700"
+          }`}>
+          {isSaving ? "저장 중..." : isSaved ? "✓ 저장 완료" : "저장"}
+        </button>
+      </div>
+
+      {/* 에러 메시지 */}
+      {saveError && (
+        <div className="mt-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
+          ⚠️ {saveError}
+        </div>
+      )}
 
       {/* 안내 메시지 */}
       <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">

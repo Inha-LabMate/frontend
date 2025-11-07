@@ -24,17 +24,22 @@ const STORAGE_KEY = "resume_self_intro";
  */
 export function getSelfIntroFromStorage(): SelfIntroData {
   if (typeof window === "undefined") {
+    console.warn("서버 사이드에서는 localStorage를 사용할 수 없습니다.");
     return getEmptySelfIntro();
   }
 
   try {
     const data = localStorage.getItem(STORAGE_KEY);
     if (!data) {
+      console.log("📭 저장된 자기소개서 데이터가 없습니다.");
       return getEmptySelfIntro();
     }
-    return JSON.parse(data);
+
+    const parsed = JSON.parse(data) as SelfIntroData;
+    console.log("✅ 자기소개서 불러오기 성공:", STORAGE_KEY);
+    return parsed;
   } catch (error) {
-    console.error("자기소개서 데이터 불러오기 실패:", error);
+    console.error("❌ 자기소개서 데이터 불러오기 실패:", error);
     return getEmptySelfIntro();
   }
 }
@@ -42,30 +47,55 @@ export function getSelfIntroFromStorage(): SelfIntroData {
 /**
  * 자기소개서 데이터를 로컬스토리지에 저장
  */
-export function saveSelfIntroToStorage(data: SelfIntroData): void {
+export function saveSelfIntroToStorage(data: SelfIntroData): boolean {
   if (typeof window === "undefined") {
-    return;
+    console.warn("서버 사이드에서는 localStorage를 사용할 수 없습니다.");
+    return false;
   }
 
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    const jsonString = JSON.stringify(data);
+    localStorage.setItem(STORAGE_KEY, jsonString);
+
+    // 저장 검증
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved === jsonString) {
+      console.log("✅ 자기소개서 저장 성공:", STORAGE_KEY);
+      return true;
+    } else {
+      console.error("❌ 저장 검증 실패: 저장된 데이터가 일치하지 않습니다.");
+      return false;
+    }
   } catch (error) {
-    console.error("자기소개서 데이터 저장 실패:", error);
+    console.error("❌ 자기소개서 데이터 저장 실패:", error);
+    return false;
   }
 }
 
 /**
  * 로컬스토리지에서 자기소개서 데이터 삭제
  */
-export function deleteSelfIntroFromStorage(): void {
+export function deleteSelfIntroFromStorage(): boolean {
   if (typeof window === "undefined") {
-    return;
+    console.warn("서버 사이드에서는 localStorage를 사용할 수 없습니다.");
+    return false;
   }
 
   try {
     localStorage.removeItem(STORAGE_KEY);
+
+    // 삭제 검증
+    const check = localStorage.getItem(STORAGE_KEY);
+    if (check === null) {
+      console.log("✅ 자기소개서 삭제 성공:", STORAGE_KEY);
+      return true;
+    } else {
+      console.error("❌ 삭제 검증 실패: 데이터가 여전히 존재합니다.");
+      return false;
+    }
   } catch (error) {
-    console.error("자기소개서 데이터 삭제 실패:", error);
+    console.error("❌ 자기소개서 데이터 삭제 실패:", error);
+    return false;
   }
 }
 
