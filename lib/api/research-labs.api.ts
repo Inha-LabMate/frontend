@@ -95,7 +95,7 @@ export const researchLabsApi = {
           hasResume: true,
           resumeUrl: "/resume",
         });
-      }, 300);
+      }, 800);
     });
   },
 
@@ -122,6 +122,40 @@ export const researchLabsApi = {
 
     return new Promise((resolve) => {
       setTimeout(() => {
+        // 자기소개서 데이터 기반 추천 이유 생성
+        const getRecommendationReason = (rank: number) => {
+          const hasProjects =
+            selfIntroData.portfolio && selfIntroData.portfolio.length > 50;
+          const hasAwards =
+            selfIntroData.awards && selfIntroData.awards.length > 5;
+          const hasTechStack =
+            selfIntroData.tech_stack && selfIntroData.tech_stack.length > 5;
+          const hasResearchInterest =
+            selfIntroData.research_interests &&
+            selfIntroData.research_interests.length > 5;
+
+          if (rank === 1) {
+            if (hasProjects) {
+              return `작성하신 프로젝트 경험이 연구실의 주제와 매우 잘 부합합니다. 특히 기술 스택과 연구 방향이 일치하여 즉시 연구에 기여하실 수 있습니다.`;
+            } else if (hasResearchInterest) {
+              return `귀하의 연구 관심 분야가 연구실의 핵심 주제와 매우 유사합니다. 지원자의 학업 배경과 연구 목표가 연구실의 방향성과 완벽하게 일치합니다.`;
+            }
+            return `학점, 기술 스택, 연구 관심사가 종합적으로 연구실 요구사항과 매우 잘 부합합니다.`;
+          } else if (rank === 2) {
+            if (hasAwards) {
+              return `수상 경력이 연구실의 연구 분야와 관련성이 높습니다. 해당 분야에 대한 이해도와 열정이 돋보입니다.`;
+            } else if (hasTechStack) {
+              return `보유하신 기술 스택이 연구실에서 진행 중인 프로젝트에 적합합니다. 빠른 적응이 가능할 것으로 예상됩니다.`;
+            }
+            return `학업 성적과 연구 관심사가 연구실의 방향성과 잘 맞습니다.`;
+          } else {
+            if (hasTechStack) {
+              return `기술 스택과 학업 배경이 연구실의 기본 요구사항을 충족합니다. 추가 학습을 통해 연구에 기여하실 수 있습니다.`;
+            }
+            return `연구 관심사와 기본 역량이 연구실의 연구 분야와 관련성이 있습니다.`;
+          }
+        };
+
         resolve([
           {
             id: 1,
@@ -133,7 +167,7 @@ export const researchLabsApi = {
               "금융 시계열 예측, 금융 자연어 처리, 인공지능 기반 포트폴리오 관리, 머신러닝/딥러닝 자동화",
             compatibility: "높음",
             expectedAcceptance: "높음",
-            reason: "OO 프로젝트와 연구실의 주제가 매우 유사함",
+            reason: getRecommendationReason(1),
           },
           {
             id: 2,
@@ -145,7 +179,7 @@ export const researchLabsApi = {
               "감성 컴퓨팅(Affective Computing), 뇌-컴퓨터 인터페이스(Brain-Computer Interface), 기계학습(Machine Learning)",
             compatibility: "높음",
             expectedAcceptance: "중간",
-            reason: "OO 수상경력과 연구실의 주제가 매우 유사함",
+            reason: getRecommendationReason(2),
           },
           {
             id: 3,
@@ -157,10 +191,12 @@ export const researchLabsApi = {
               "Mobile/edge/cloud computing, Artificial intelligence, Optimization",
             compatibility: "중간",
             expectedAcceptance: "중간",
-            reason: "OO 포트폴리오와 연구실의 주제가 매우 유사함",
+            reason: getRecommendationReason(3),
           },
         ]);
       }, 800);
     });
   },
 };
+
+export default researchLabsApi;
