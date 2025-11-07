@@ -50,66 +50,71 @@ export default function CoverLetterTab() {const { t } = useTranslation();
         </div>
 
         <div className="p-6 space-y-8">
-          {/* Question 1 */}
+          {/* Question 1 - 지원 동기 */}
           <div>
-            <div className="flex items-start gap-4 mb-2">
-              <span className="bg-gray-100 px-4 py-2 text-black font-medium whitespace-nowrap">{t("문항 1")}
-
-              </span>
-              <textarea
-                value={answers.question1}
-                onChange={(e) =>
+            <label className="block text-sm font-medium text-black mb-2">
+              <span className="text-red-500">*</span>
+              {t("지원 동기 (500자 이내)")}
+            </label>
+            <p className="text-xs text-gray-600 mb-2">
+              {t("해당 연구실에 지원하게 된 동기를 작성해주세요.")}
+            </p>
+            <textarea
+              value={answers.question1}
+              onChange={(e) =>
                 setAnswers({ ...answers, question1: e.target.value })
-                }
-                maxLength={800}
-                className="flex-1 min-h-[150px] px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-inha-blue focus:border-transparent resize-none"
-                placeholder={t("자기소개서를 작성해주세요 (800자 이내)")} />
-
-            </div>
-            <div className="text-right text-sm text-gray-600">
-              {getCharCount(answers.question1)}/800
+              }
+              maxLength={500}
+              className="w-full min-h-[150px] px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-inha-blue focus:border-transparent resize-none"
+              placeholder=""
+            />
+            <div className="text-right text-xs text-gray-500 mt-1">
+              {getCharCount(answers.question1)}{t("/ 500자")}
             </div>
           </div>
 
-          {/* Question 2 */}
+          {/* Question 2 - 관련 경험 및 프로젝트 */}
           <div>
-            <div className="flex items-start gap-4 mb-2">
-              <span className="bg-gray-100 px-4 py-2 text-black font-medium whitespace-nowrap">{t("문항 2")}
-
-              </span>
-              <textarea
-                value={answers.question2}
-                onChange={(e) =>
+            <label className="block text-sm font-medium text-black mb-2">
+              {t("관련 경험 및 프로젝트 (선택)")}
+            </label>
+            <p className="text-xs text-gray-600 mb-2">
+              {t("관련 수업, 프로젝트, 동아리 활동 등의 경험이 있다면 작성해주세요.")}
+            </p>
+            <textarea
+              value={answers.question2}
+              onChange={(e) =>
                 setAnswers({ ...answers, question2: e.target.value })
-                }
-                maxLength={800}
-                className="flex-1 min-h-[150px] px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-inha-blue focus:border-transparent resize-none"
-                placeholder={t("자기소개서를 작성해주세요 (800자 이내)")} />
-
-            </div>
-            <div className="text-right text-sm text-gray-600">
-              {getCharCount(answers.question2)}/800
+              }
+              maxLength={500}
+              className="w-full min-h-[150px] px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-inha-blue focus:border-transparent resize-none"
+              placeholder=""
+            />
+            <div className="text-right text-xs text-gray-500 mt-1">
+              {getCharCount(answers.question2)}{t("/ 500자")}
             </div>
           </div>
 
-          {/* Question 3 */}
+          {/* Question 3 - 관심 연구 분야 */}
           <div>
-            <div className="flex items-start gap-4 mb-2">
-              <span className="bg-gray-100 px-4 py-2 text-black font-medium whitespace-nowrap">{t("문항 3")}
-
-              </span>
-              <textarea
-                value={answers.question3}
-                onChange={(e) =>
+            <label className="block text-sm font-medium text-black mb-2">
+              <span className="text-red-500">*</span>
+              {t("관심 연구 분야 (300자 이내)")}
+            </label>
+            <p className="text-xs text-gray-600 mb-2">
+              {t("관심 있는 연구 주제나 배우고 싶은 내용을 작성해주세요.")}
+            </p>
+            <textarea
+              value={answers.question3}
+              onChange={(e) =>
                 setAnswers({ ...answers, question3: e.target.value })
-                }
-                maxLength={800}
-                className="flex-1 min-h-[150px] px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-inha-blue focus:border-transparent resize-none"
-                placeholder={t("자기소개서를 작성해주세요 (800자 이내)")} />
-
-            </div>
-            <div className="text-right text-sm text-gray-600">
-              {getCharCount(answers.question3)}/800
+              }
+              maxLength={300}
+              className="w-full min-h-[120px] px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-inha-blue focus:border-transparent resize-none"
+              placeholder=""
+            />
+            <div className="text-right text-xs text-gray-500 mt-1">
+              {getCharCount(answers.question3)}{t("/ 300자")}
             </div>
           </div>
         </div>

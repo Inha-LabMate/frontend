@@ -1,4 +1,5 @@
-"use client";import { useTranslation } from "i18nexus";
+"use client";
+import { useTranslation } from "i18nexus";
 
 import { useState } from "react";
 import { useSubmitApplication } from "@/lib/hooks/useUndergradApply";
@@ -19,7 +20,8 @@ interface ApplicationForm extends Record<string, string> {
   interests: string;
 }
 
-export default function UndergradApplyPage() {const { t } = useTranslation();
+export default function UndergradApplyPage() {
+  const { t } = useTranslation();
   const submitMutation = useSubmitApplication();
 
   const [formData, setFormData] = useState<ApplicationForm>({
@@ -35,14 +37,14 @@ export default function UndergradApplyPage() {const { t } = useTranslation();
     professor: "",
     motivation: "",
     experience: "",
-    interests: ""
+    interests: "",
   });
 
   const handleChange = (
-  e: React.ChangeEvent<
-    HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
-
-  {
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
@@ -68,7 +70,7 @@ export default function UndergradApplyPage() {const { t } = useTranslation();
         professor: "",
         motivation: "",
         experience: "",
-        interests: ""
+        interests: "",
       });
     } catch (error) {
       alert(t("신청 중 오류가 발생했습니다."));
@@ -81,26 +83,33 @@ export default function UndergradApplyPage() {const { t } = useTranslation();
       {/* Title and Breadcrumb */}
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-black mb-2">
-          <span className="text-inha-blue">■</span>{t("학부연구생 신청")}
+          <span className="text-inha-blue">■</span>
+          {t("학부연구생 신청")}
         </h1>
-        <div className="text-sm text-black mb-4">{t("홈 > 대학원(학적) > 학부연구생 신청")}
-
+        <div className="text-sm text-black mb-4">
+          {t("홈 > 대학원(학적) > 학부연구생 신청")}
         </div>
         <hr className="border-gray-200" />
       </div>
 
       {/* Info Notice */}
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-        <h3 className="text-sm font-semibold text-blue-900 mb-2">{t("📌 학부연구생 신청 안내")}
-
+        <h3 className="text-sm font-semibold text-blue-900 mb-2">
+          {t("📌 학부연구생 신청 안내")}
         </h3>
         <ul className="text-xs text-blue-800 space-y-1 list-disc list-inside">
-          <li>{t("학부연구생은 학기당 최대 1개의 연구실에만 신청 가능합니다.")}</li>
-          <li>{t("신청 후 교수님의 승인이 필요하며, 승인 결과는 이메일로 통보됩니다.")}
-
+          <li>
+            {t("학부연구생은 학기당 최대 1개의 연구실에만 신청 가능합니다.")}
+          </li>
+          <li>
+            {t(
+              "신청 후 교수님의 승인이 필요하며, 승인 결과는 이메일로 통보됩니다."
+            )}
           </li>
           <li>{t("학점 3.0 이상인 학생만 신청 가능합니다.")}</li>
-          <li>{t("신청 기간: 매 학기 개강 전 2주 ~ 개강 후 2주 (학사일정 참고)")}</li>
+          <li>
+            {t("신청 기간: 매 학기 개강 전 2주 ~ 개강 후 2주 (학사일정 참고)")}
+          </li>
         </ul>
       </div>
 
@@ -108,13 +117,14 @@ export default function UndergradApplyPage() {const { t } = useTranslation();
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* 기본 정보 */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <h2 className="text-lg font-bold text-black mb-4 pb-2 border-b">{t("1. 기본 정보")}
-
+          <h2 className="text-lg font-bold text-black mb-4 pb-2 border-b">
+            {t("1. 기본 정보")}
           </h2>
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-black mb-2">
-                <span className="text-red-500">*</span>{t("이름")}
+                <span className="text-red-500">*</span>
+                {t("이름")}
               </label>
               <input
                 type="text"
@@ -123,12 +133,13 @@ export default function UndergradApplyPage() {const { t } = useTranslation();
                 onChange={handleChange}
                 required
                 className="w-full px-4 py-2 border border-gray-300 rounded-md text-black bg-white placeholder:text-gray-400 focus:ring-2 focus:ring-inha-blue focus:border-inha-blue"
-                placeholder={t("홍길동")} />
-
+                placeholder={t("홍길동")}
+              />
             </div>
             <div>
               <label className="block text-sm font-medium text-black mb-2">
-                <span className="text-red-500">*</span>{t("학번")}
+                <span className="text-red-500">*</span>
+                {t("학번")}
               </label>
               <input
                 type="text"
@@ -137,12 +148,13 @@ export default function UndergradApplyPage() {const { t } = useTranslation();
                 onChange={handleChange}
                 required
                 className="w-full px-4 py-2 border border-gray-300 rounded-md text-black bg-white placeholder:text-gray-400 focus:ring-2 focus:ring-inha-blue focus:border-inha-blue"
-                placeholder="12345678" />
-
+                placeholder="12345678"
+              />
             </div>
             <div>
               <label className="block text-sm font-medium text-black mb-2">
-                <span className="text-red-500">*</span>{t("소속 학과")}
+                <span className="text-red-500">*</span>
+                {t("소속 학과")}
               </label>
               <input
                 type="text"
@@ -151,12 +163,13 @@ export default function UndergradApplyPage() {const { t } = useTranslation();
                 onChange={handleChange}
                 required
                 className="w-full px-4 py-2 border border-gray-300 rounded-md text-black bg-white placeholder:text-gray-400 focus:ring-2 focus:ring-inha-blue focus:border-inha-blue"
-                placeholder={t("컴퓨터공학과")} />
-
+                placeholder={t("컴퓨터공학과")}
+              />
             </div>
             <div>
               <label className="block text-sm font-medium text-black mb-2">
-                <span className="text-red-500">*</span>{t("학년")}
+                <span className="text-red-500">*</span>
+                {t("학년")}
               </label>
               <select
                 name="grade"
@@ -164,23 +177,24 @@ export default function UndergradApplyPage() {const { t } = useTranslation();
                 onChange={handleChange}
                 required
                 className="w-full px-4 py-2 border border-gray-300 rounded-md text-black bg-white focus:ring-2 focus:ring-inha-blue focus:border-inha-blue">
-                <option value="" className="bg-white text-black">{t("선택하세요")}
-
+                <option value="" className="bg-white text-black">
+                  {t("선택하세요")}
                 </option>
-                <option value="2" className="bg-white text-black">{t("2학년")}
-
+                <option value="2" className="bg-white text-black">
+                  {t("2학년")}
                 </option>
-                <option value="3" className="bg-white text-black">{t("3학년")}
-
+                <option value="3" className="bg-white text-black">
+                  {t("3학년")}
                 </option>
-                <option value="4" className="bg-white text-black">{t("4학년")}
-
+                <option value="4" className="bg-white text-black">
+                  {t("4학년")}
                 </option>
               </select>
             </div>
             <div>
               <label className="block text-sm font-medium text-black mb-2">
-                <span className="text-red-500">*</span>{t("연락처")}
+                <span className="text-red-500">*</span>
+                {t("연락처")}
               </label>
               <input
                 type="tel"
@@ -189,12 +203,13 @@ export default function UndergradApplyPage() {const { t } = useTranslation();
                 onChange={handleChange}
                 required
                 className="w-full px-4 py-2 border border-gray-300 rounded-md text-black bg-white placeholder:text-gray-400 focus:ring-2 focus:ring-inha-blue focus:border-inha-blue"
-                placeholder="010-1234-5678" />
-
+                placeholder="010-1234-5678"
+              />
             </div>
             <div>
               <label className="block text-sm font-medium text-black mb-2">
-                <span className="text-red-500">*</span>{t("이메일")}
+                <span className="text-red-500">*</span>
+                {t("이메일")}
               </label>
               <input
                 type="email"
@@ -203,12 +218,13 @@ export default function UndergradApplyPage() {const { t } = useTranslation();
                 onChange={handleChange}
                 required
                 className="w-full px-4 py-2 border border-gray-300 rounded-md text-black bg-white placeholder:text-gray-400 focus:ring-2 focus:ring-inha-blue focus:border-inha-blue"
-                placeholder="example@inha.edu" />
-
+                placeholder="example@inha.edu"
+              />
             </div>
             <div>
               <label className="block text-sm font-medium text-black mb-2">
-                <span className="text-red-500">*</span>{t("평점 (GPA)")}
+                <span className="text-red-500">*</span>
+                {t("평점 (GPA)")}
               </label>
               <input
                 type="text"
@@ -218,12 +234,13 @@ export default function UndergradApplyPage() {const { t } = useTranslation();
                 required
                 pattern="[0-4](\.[0-9]{1,2})?"
                 className="w-full px-4 py-2 border border-gray-300 rounded-md text-black bg-white placeholder:text-gray-400 focus:ring-2 focus:ring-inha-blue focus:border-inha-blue"
-                placeholder={t("3.50 (4.5 만점)")} />
-
+                placeholder={t("3.50 (4.5 만점)")}
+              />
             </div>
             <div>
               <label className="block text-sm font-medium text-black mb-2">
-                <span className="text-red-500">*</span>{t("신청 학기")}
+                <span className="text-red-500">*</span>
+                {t("신청 학기")}
               </label>
               <select
                 name="yearSemester"
@@ -231,14 +248,14 @@ export default function UndergradApplyPage() {const { t } = useTranslation();
                 onChange={handleChange}
                 required
                 className="w-full px-4 py-2 border border-gray-300 rounded-md text-black bg-white focus:ring-2 focus:ring-inha-blue focus:border-inha-blue">
-                <option value="20253" className="bg-white text-black">{t("2025-3학기 (여름학기)")}
-
+                <option value="20253" className="bg-white text-black">
+                  {t("2025-3학기 (여름학기)")}
                 </option>
-                <option value="20252" className="bg-white text-black">{t("2025-2학기")}
-
+                <option value="20252" className="bg-white text-black">
+                  {t("2025-2학기")}
                 </option>
-                <option value="20251" className="bg-white text-black">{t("2025-1학기")}
-
+                <option value="20251" className="bg-white text-black">
+                  {t("2025-1학기")}
                 </option>
               </select>
             </div>
@@ -247,13 +264,14 @@ export default function UndergradApplyPage() {const { t } = useTranslation();
 
         {/* 연구실 정보 */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <h2 className="text-lg font-bold text-black mb-4 pb-2 border-b">{t("2. 연구실 정보")}
-
+          <h2 className="text-lg font-bold text-black mb-4 pb-2 border-b">
+            {t("2. 연구실 정보")}
           </h2>
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-black mb-2">
-                <span className="text-red-500">*</span>{t("희망 연구실명")}
+                <span className="text-red-500">*</span>
+                {t("희망 연구실명")}
               </label>
               <input
                 type="text"
@@ -262,15 +280,19 @@ export default function UndergradApplyPage() {const { t } = useTranslation();
                 onChange={handleChange}
                 required
                 className="w-full px-4 py-2 border border-gray-300 rounded-md text-black bg-white placeholder:text-gray-400 focus:ring-2 focus:ring-inha-blue focus:border-inha-blue"
-                placeholder={t("예) 조합적 알고리즘 연구실")} />
+                placeholder={t("예) 조합적 알고리즘 연구실")}
+              />
 
-              <p className="text-xs text-gray-500 mt-1">{t("* 연구실 탐색 메뉴에서 연구실 정보를 확인하실 수 있습니다.")}
-
+              <p className="text-xs text-gray-500 mt-1">
+                {t(
+                  "* 연구실 탐색 메뉴에서 연구실 정보를 확인하실 수 있습니다."
+                )}
               </p>
             </div>
             <div>
               <label className="block text-sm font-medium text-black mb-2">
-                <span className="text-red-500">*</span>{t("지도교수명")}
+                <span className="text-red-500">*</span>
+                {t("지도교수명")}
               </label>
               <input
                 type="text"
@@ -279,21 +301,22 @@ export default function UndergradApplyPage() {const { t } = useTranslation();
                 onChange={handleChange}
                 required
                 className="w-full px-4 py-2 border border-gray-300 rounded-md text-black bg-white placeholder:text-gray-400 focus:ring-2 focus:ring-inha-blue focus:border-inha-blue"
-                placeholder={t("예) 안정호")} />
-
+                placeholder={t("예) 안정호")}
+              />
             </div>
           </div>
         </div>
 
         {/* 신청 동기 및 계획 */}
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <h2 className="text-lg font-bold text-black mb-4 pb-2 border-b">{t("3. 신청 동기 및 계획")}
-
+          <h2 className="text-lg font-bold text-black mb-4 pb-2 border-b">
+            {t("3. 신청 동기 및 계획")}
           </h2>
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-black mb-2">
-                <span className="text-red-500">*</span>{t("지원 동기 (500자 이내)")}
+                <span className="text-red-500">*</span>
+                {t("지원 동기 (500자 이내)")}
               </label>
               <p className="text-xs text-gray-600 mb-2">
                 {t("해당 연구실에 지원하게 된 동기를 작성해주세요.")}
@@ -308,15 +331,18 @@ export default function UndergradApplyPage() {const { t } = useTranslation();
                 className="w-full px-4 py-2 border border-gray-300 rounded-md text-black bg-white placeholder:text-gray-400 focus:ring-2 focus:ring-inha-blue focus:border-inha-blue resize-none"
                 placeholder=""></textarea>
               <div className="text-right text-xs text-gray-500 mt-1">
-                {formData.motivation.length}{t("/ 500자")}
+                {formData.motivation.length}
+                {t("/ 500자")}
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-black mb-2">{t("관련 경험 및 프로젝트 (선택)")}
-
+              <label className="block text-sm font-medium text-black mb-2">
+                {t("관련 경험 및 프로젝트 (선택)")}
               </label>
               <p className="text-xs text-gray-600 mb-2">
-                {t("관련 수업, 프로젝트, 동아리 활동 등의 경험이 있다면 작성해주세요.")}
+                {t(
+                  "관련 수업, 프로젝트, 동아리 활동 등의 경험이 있다면 작성해주세요."
+                )}
               </p>
               <textarea
                 name="experience"
@@ -327,13 +353,14 @@ export default function UndergradApplyPage() {const { t } = useTranslation();
                 className="w-full px-4 py-2 border border-gray-300 rounded-md text-black bg-white placeholder:text-gray-400 focus:ring-2 focus:ring-inha-blue focus:border-inha-blue resize-none"
                 placeholder=""></textarea>
               <div className="text-right text-xs text-gray-500 mt-1">
-                {formData.experience.length}{t("/ 500자")}
+                {formData.experience.length}
+                {t("/ 500자")}
               </div>
             </div>
             <div>
               <label className="block text-sm font-medium text-black mb-2">
-                <span className="text-red-500">*</span>{t("관심 연구 분야 (300자 이내)")}
-
+                <span className="text-red-500">*</span>
+                {t("관심 연구 분야 (300자 이내)")}
               </label>
               <p className="text-xs text-gray-600 mb-2">
                 {t("관심 있는 연구 주제나 배우고 싶은 내용을 작성해주세요.")}
@@ -348,7 +375,8 @@ export default function UndergradApplyPage() {const { t } = useTranslation();
                 className="w-full px-4 py-2 border border-gray-300 rounded-md text-black bg-white placeholder:text-gray-400 focus:ring-2 focus:ring-inha-blue focus:border-inha-blue resize-none"
                 placeholder=""></textarea>
               <div className="text-right text-xs text-gray-500 mt-1">
-                {formData.interests.length}{t("/ 300자")}
+                {formData.interests.length}
+                {t("/ 300자")}
               </div>
             </div>
           </div>
@@ -360,14 +388,17 @@ export default function UndergradApplyPage() {const { t } = useTranslation();
             <input
               type="checkbox"
               required
-              className="mt-1 w-4 h-4 text-inha-blue border-gray-300 rounded focus:ring-inha-blue" />
+              className="mt-1 w-4 h-4 text-inha-blue border-gray-300 rounded focus:ring-inha-blue"
+            />
 
             <span className="text-sm text-black">
-              <span className="text-red-500">*</span>{t("개인정보 수집 및 이용에\n              동의합니다.")}
+              <span className="text-red-500">*</span>
+              {t("개인정보 수집 및 이용에\n              동의합니다.")}
 
-              <span className="text-xs text-gray-500 block mt-1">{t("수집된 개인정보는 학부연구생 선발 및 운영 목적으로만 사용되며,\n                신청 후 1년간 보관됩니다.")}
-
-
+              <span className="text-xs text-gray-500 block mt-1">
+                {t(
+                  "수집된 개인정보는 학부연구생 선발 및 운영 목적으로만 사용되며,\n                신청 후 1년간 보관됩니다."
+                )}
               </span>
             </span>
           </label>
@@ -385,27 +416,30 @@ export default function UndergradApplyPage() {const { t } = useTranslation();
             type="button"
             onClick={() => {
               if (
-              confirm(t("작성 중인 내용이 모두 삭제됩니다. 취소하시겠습니까?")))
-              {
+                confirm(
+                  t("작성 중인 내용이 모두 삭제됩니다. 취소하시겠습니까?")
+                )
+              ) {
                 window.history.back();
               }
             }}
-            className="px-8 py-3 bg-gray-500 text-white font-medium rounded-md hover:opacity-90 transition-opacity">{t("취소")}
-
+            className="px-8 py-3 bg-gray-500 text-white font-medium rounded-md hover:opacity-90 transition-opacity">
+            {t("취소")}
           </button>
         </div>
       </form>
 
       {/* Additional Info */}
       <div className="mt-8 bg-gray-50 rounded-lg border border-gray-200 p-4">
-        <h3 className="text-sm font-semibold text-gray-800 mb-2">{t("📞 문의사항")}
-
+        <h3 className="text-sm font-semibold text-gray-800 mb-2">
+          {t("📞 문의사항")}
         </h3>
-        <p className="text-xs text-gray-600">{t("학부연구생 신청 관련 문의: 소속 학과 행정실 또는\n          학사관리팀(032-860-7000)")}
-
-
+        <p className="text-xs text-gray-600">
+          {t(
+            "학부연구생 신청 관련 문의: 소속 학과 행정실 또는\n          학사관리팀(032-860-7000)"
+          )}
         </p>
       </div>
-    </>);
-
+    </>
+  );
 }
