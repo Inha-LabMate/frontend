@@ -295,6 +295,9 @@ export default function UndergradApplyPage() {const { t } = useTranslation();
               <label className="block text-sm font-medium text-black mb-2">
                 <span className="text-red-500">*</span>{t("지원 동기 (500자 이내)")}
               </label>
+              <p className="text-xs text-gray-600 mb-2">
+                {t("해당 연구실에 지원하게 된 동기를 작성해주세요.")}
+              </p>
               <textarea
                 name="motivation"
                 value={formData.motivation}
@@ -303,7 +306,7 @@ export default function UndergradApplyPage() {const { t } = useTranslation();
                 maxLength={500}
                 rows={5}
                 className="w-full px-4 py-2 border border-gray-300 rounded-md text-black bg-white placeholder:text-gray-400 focus:ring-2 focus:ring-inha-blue focus:border-inha-blue resize-none"
-                placeholder={t("해당 연구실에 지원하게 된 동기를 작성해주세요.")}></textarea>
+                placeholder=""></textarea>
               <div className="text-right text-xs text-gray-500 mt-1">
                 {formData.motivation.length}{t("/ 500자")}
               </div>
@@ -312,6 +315,9 @@ export default function UndergradApplyPage() {const { t } = useTranslation();
               <label className="block text-sm font-medium text-black mb-2">{t("관련 경험 및 프로젝트 (선택)")}
 
               </label>
+              <p className="text-xs text-gray-600 mb-2">
+                {t("관련 수업, 프로젝트, 동아리 활동 등의 경험이 있다면 작성해주세요.")}
+              </p>
               <textarea
                 name="experience"
                 value={formData.experience}
@@ -319,16 +325,19 @@ export default function UndergradApplyPage() {const { t } = useTranslation();
                 maxLength={500}
                 rows={5}
                 className="w-full px-4 py-2 border border-gray-300 rounded-md text-black bg-white placeholder:text-gray-400 focus:ring-2 focus:ring-inha-blue focus:border-inha-blue resize-none"
-                placeholder={t("관련 수업, 프로젝트, 동아리 활동 등의 경험이 있다면 작성해주세요.")}></textarea>
+                placeholder=""></textarea>
               <div className="text-right text-xs text-gray-500 mt-1">
                 {formData.experience.length}{t("/ 500자")}
               </div>
             </div>
             <div>
               <label className="block text-sm font-medium text-black mb-2">
-                <span className="text-red-500">*</span>{t("관심 연구 분야 (300자\n                이내)")}
+                <span className="text-red-500">*</span>{t("관심 연구 분야 (300자 이내)")}
 
               </label>
+              <p className="text-xs text-gray-600 mb-2">
+                {t("관심 있는 연구 주제나 배우고 싶은 내용을 작성해주세요.")}
+              </p>
               <textarea
                 name="interests"
                 value={formData.interests}
@@ -337,7 +346,7 @@ export default function UndergradApplyPage() {const { t } = useTranslation();
                 maxLength={300}
                 rows={4}
                 className="w-full px-4 py-2 border border-gray-300 rounded-md text-black bg-white placeholder:text-gray-400 focus:ring-2 focus:ring-inha-blue focus:border-inha-blue resize-none"
-                placeholder={t("관심 있는 연구 주제나 배우고 싶은 내용을 작성해주세요.")}></textarea>
+                placeholder=""></textarea>
               <div className="text-right text-xs text-gray-500 mt-1">
                 {formData.interests.length}{t("/ 300자")}
               </div>
