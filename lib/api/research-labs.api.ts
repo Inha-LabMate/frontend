@@ -3,6 +3,11 @@
  * 정적 JSON 파일을 사용하여 데이터 로드
  */
 
+import {
+  getSelfIntroFromStorage,
+  formatSelfIntroForAI,
+} from "../utils/resume-storage";
+
 // API Response 타입 (서버에서 받는 원본 데이터)
 export interface ApiRecommendedLab {
   id: number;
@@ -98,7 +103,22 @@ export const researchLabsApi = {
    * AI 기반 연구실 추천 (이력서 기반)
    */
   getRecommendedLabs: async (): Promise<ApiRecommendedLab[]> => {
-    // TODO: 실제 API 연동 시 구현
+    // 로컬스토리지에서 자기소개서 데이터 가져오기
+    const selfIntroData = getSelfIntroFromStorage();
+    const formattedSelfIntro = formatSelfIntroForAI(selfIntroData);
+
+    console.log("📄 자기소개서 데이터 (포맷팅됨):\n", formattedSelfIntro);
+
+    // TODO: 실제 API 연동 시 자기소개서 데이터를 백엔드로 전송
+    // const response = await fetch('/api/recommend', {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify({
+    //     selfIntro: formattedSelfIntro,
+    //     rawData: selfIntroData
+    //   })
+    // });
+
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve([

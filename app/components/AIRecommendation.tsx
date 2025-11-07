@@ -1,29 +1,32 @@
-"use client";import { useTranslation } from "i18nexus";
+"use client";
+import { useTranslation } from "i18nexus";
 
 import { useState, useEffect } from "react";
 import {
   useResumeStatus,
-  useRecommendedLabs } from
-"../../lib/hooks/useResearchLabs";
+  useRecommendedLabs,
+} from "../../lib/hooks/useResearchLabs";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 
 type ViewState = "initial" | "loading" | "results" | "no-resume";
 
-export default function AIRecommendation() {const { t } = useTranslation();
+export default function AIRecommendation() {
+  const { t } = useTranslation();
   const [viewState, setViewState] = useState<ViewState>("initial");
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [loadingText, setLoadingText] = useState("");
+  const [currentSlide, setCurrentSlide] = useState(0);
   const router = useRouter();
 
   const { data: resumeStatus } = useResumeStatus();
   const {
     mutate: getRecommendations,
     data: recommendedLabs,
-    isPending
+    isPending,
   } = useRecommendedLabs();
 
-  // 로딩 애니메이션 효과
+  // 로딩 애니메이션 효과 - 0.1초마다 10%씩 증가 (1초 완료)
   useEffect(() => {
     if (viewState === "loading") {
       const loadingMessages = [
@@ -31,29 +34,35 @@ export default function AIRecommendation() {const { t } = useTranslation();
         t("연구실 데이터베이스를 검색하고 있습니다..."),
         t("적합도를 계산하고 있습니다..."),
         t("최적의 연구실을 선정하고 있습니다..."),
-        t("추천 결과를 생성하고 있습니다...")
+        t("추천 결과를 생성하고 있습니다..."),
       ];
 
       let progress = 0;
       let messageIndex = 0;
-      
-      setLoadingText(loadingMessages[0]);
 
+      setLoadingText(loadingMessages[0]);
+      setLoadingProgress(0);
+
+      // 0.1초마다 10%씩 증가 (총 1초 = 10회 * 10% = 100%)
       const progressInterval = setInterval(() => {
-        progress += Math.random() * 15;
-        if (progress > 100) progress = 100;
+        progress += 10;
+        if (progress > 100) {
+          progress = 100;
+          clearInterval(progressInterval);
+        }
         setLoadingProgress(progress);
 
-        const newMessageIndex = Math.floor((progress / 100) * loadingMessages.length);
-        if (newMessageIndex !== messageIndex && newMessageIndex < loadingMessages.length) {
+        const newMessageIndex = Math.floor(
+          (progress / 100) * loadingMessages.length
+        );
+        if (
+          newMessageIndex !== messageIndex &&
+          newMessageIndex < loadingMessages.length
+        ) {
           messageIndex = newMessageIndex;
           setLoadingText(loadingMessages[messageIndex]);
         }
-
-        if (progress >= 100) {
-          clearInterval(progressInterval);
-        }
-      }, 400);
+      }, 100); // 0.1초마다
 
       return () => clearInterval(progressInterval);
     }
@@ -65,24 +74,23 @@ export default function AIRecommendation() {const { t } = useTranslation();
 
     // 이력서 확인
     if (resumeStatus?.hasResume) {
-      // 애니메이션을 위한 지연
       setTimeout(() => {
         getRecommendations(undefined, {
           onSuccess: () => {
             setTimeout(() => {
               setViewState("results");
-            }, 800);
+            }, 500);
           },
           onError: () => {
             alert(t("추천 결과를 불러오는데 실패했습니다."));
             setViewState("initial");
-          }
+          },
         });
-      }, 2000);
+      }, 3000);
     } else {
       setTimeout(() => {
         setViewState("no-resume");
-      }, 1500);
+      }, 2000);
     }
   };
 
@@ -91,598 +99,312 @@ export default function AIRecommendation() {const { t } = useTranslation();
     router.push("/resume");
   };
 
+  // 키보드 네비게이션
+  useEffect(() => {
+    if (viewState !== "results" || !recommendedLabs) return;
+
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (e.key === "ArrowRight" || e.key === " ") {
+        e.preventDefault();
+        setCurrentSlide((prev) =>
+          prev < recommendedLabs.length - 1 ? prev + 1 : prev
+        );
+      } else if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        setCurrentSlide((prev) => (prev > 0 ? prev - 1 : prev));
+      } else if (e.key === "Escape") {
+        e.preventDefault();
+        setViewState("initial");
+        setCurrentSlide(0);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyPress);
+    return () => window.removeEventListener("keydown", handleKeyPress);
+  }, [viewState, recommendedLabs]);
+
   // 초기 화면
   if (viewState === "initial") {
     return (
-      <motion.div 
+      <motion.div
         className="w-full"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -20 }}
-        transition={{ duration: 0.5 }}
-      >
-        <motion.div 
-          className="bg-gradient-to-br from-blue-50 to-indigo-50 p-12 rounded-lg text-center shadow-lg"
-          whileHover={{ scale: 1.01 }}
-          transition={{ type: "spring", stiffness: 300 }}
-        >
+        transition={{ duration: 0.5 }}>
+        <div className="bg-white p-12 rounded-lg text-center shadow-lg border border-gray-200">
           <div className="max-w-md mx-auto">
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-            >
-              <div className="mb-6 inline-block">
-                <motion.div
-                  animate={{ 
-                    rotate: [0, 5, -5, 0],
-                  }}
-                  transition={{ 
-                    duration: 2,
-                    repeat: Infinity,
-                    repeatDelay: 1
-                  }}
-                  className="text-6xl"
-                >
-                  🤖
-                </motion.div>
-              </div>
-            </motion.div>
-            
-            <motion.h2 
-              className="text-2xl font-bold text-gray-800 mb-4"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-            >
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">
               {t("나에게 적합한 연구실을 찾고 계신가요?")}
-            </motion.h2>
-            
-            <motion.p 
-              className="text-gray-600 mb-8 text-lg"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.4 }}
-            >
+            </h2>
+
+            <p className="text-gray-600 mb-8 text-lg">
               {t("AI가 입력하신 이력서 정보를 기반으로")}
               <br />
               <span className="font-semibold text-inha-blue">
                 {t("맞춤형 연구실을 추천해드립니다.")}
               </span>
-            </motion.p>
-            
-            <motion.button
-              onClick={handleStartRecommendation}
-              className="px-10 py-4 bg-gradient-to-r from-inha-blue to-blue-600 text-white rounded-lg font-bold text-lg shadow-lg relative overflow-hidden group"
-              whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(0, 102, 204, 0.3)" }}
-              whileTap={{ scale: 0.95 }}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-            >
-              <motion.span
-                className="absolute inset-0 bg-white"
-                initial={{ x: "-100%" }}
-                whileHover={{ x: "100%" }}
-                transition={{ duration: 0.5 }}
-                style={{ opacity: 0.2 }}
-              />
-              <span className="relative z-10 flex items-center gap-2 justify-center">
-                <motion.span
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                >
-                  ✨
-                </motion.span>
-                {t("AI 추천 시작")}
-                <motion.span
-                  animate={{ x: [0, 5, 0] }}
-                  transition={{ duration: 1, repeat: Infinity }}
-                >
-                  →
-                </motion.span>
-              </span>
-            </motion.button>
-          </div>
-        </motion.div>
-      </motion.div>);
+            </p>
 
+            <button
+              onClick={handleStartRecommendation}
+              className="px-10 py-4 bg-inha-blue hover:bg-blue-700 text-white rounded-lg font-bold text-lg shadow-lg transition-colors">
+              {t("AI 추천 시작")}
+            </button>
+          </div>
+        </div>
+      </motion.div>
+    );
   }
 
   // 로딩 중
   if (viewState === "loading" || isPending) {
     return (
-      <motion.div 
+      <motion.div
         className="w-full"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-      >
-        <div className="bg-gradient-to-br from-blue-50 to-indigo-50 p-12 rounded-lg text-center shadow-lg">
+        exit={{ opacity: 0 }}>
+        <div className="bg-white p-12 rounded-lg text-center shadow-lg border border-gray-200">
           <div className="max-w-2xl mx-auto">
-            {/* AI Brain Animation */}
+            {/* Simple Spinner */}
             <motion.div
-              className="relative w-32 h-32 mx-auto mb-8"
-              animate={{ 
-                rotate: 360,
-              }}
-              transition={{ 
-                duration: 3,
+              className="w-16 h-16 mx-auto mb-8 border-4 border-gray-200 border-t-inha-blue rounded-full"
+              animate={{ rotate: 360 }}
+              transition={{
+                duration: 1,
                 repeat: Infinity,
-                ease: "linear"
+                ease: "linear",
               }}
-            >
-              <motion.div
-                className="absolute inset-0 border-8 border-inha-blue rounded-full"
-                style={{ borderTopColor: "transparent", borderRightColor: "transparent" }}
-              />
-              <motion.div
-                className="absolute inset-4 border-8 border-blue-400 rounded-full"
-                style={{ borderBottomColor: "transparent", borderLeftColor: "transparent" }}
-                animate={{ rotate: -360 }}
-                transition={{ 
-                  duration: 2,
-                  repeat: Infinity,
-                  ease: "linear"
-                }}
-              />
-              <motion.div
-                className="absolute inset-0 flex items-center justify-center text-5xl"
-                animate={{ 
-                  scale: [1, 1.2, 1],
-                }}
-                transition={{ 
-                  duration: 1.5,
-                  repeat: Infinity,
-                }}
-              >
-                🧠
-              </motion.div>
-            </motion.div>
+            />
 
             {/* Progress Bar */}
             <div className="mb-6">
-              <div className="h-3 bg-gray-200 rounded-full overflow-hidden shadow-inner">
-                <motion.div
-                  className="h-full bg-gradient-to-r from-inha-blue via-blue-500 to-indigo-600 rounded-full relative"
-                  initial={{ width: 0 }}
-                  animate={{ width: `${loadingProgress}%` }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <motion.div
-                    className="absolute inset-0 bg-white opacity-30"
-                    animate={{ 
-                      x: ["-100%", "100%"],
-                    }}
-                    transition={{ 
-                      duration: 1,
-                      repeat: Infinity,
-                      ease: "linear"
-                    }}
-                  />
-                </motion.div>
+              <div className="h-3 bg-gray-200 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-inha-blue rounded-full transition-all duration-1000 ease-linear"
+                  style={{ width: `${loadingProgress}%` }}
+                />
               </div>
-              <motion.div
-                className="text-right mt-2 text-sm font-semibold text-inha-blue"
-                key={loadingProgress}
-                initial={{ opacity: 0, y: -5 }}
-                animate={{ opacity: 1, y: 0 }}
-              >
+              <div className="text-right mt-2 text-sm font-semibold text-gray-600">
                 {Math.floor(loadingProgress)}%
-              </motion.div>
+              </div>
             </div>
 
             {/* Loading Text */}
             <AnimatePresence mode="wait">
               <motion.div
                 key={loadingText}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
                 transition={{ duration: 0.3 }}
-                className="mb-6"
-              >
-                <p className="text-gray-700 font-medium text-lg">{loadingText}</p>
+                className="mb-6">
+                <p className="text-gray-700 font-medium text-lg">
+                  {loadingText}
+                </p>
               </motion.div>
             </AnimatePresence>
 
-            {/* Floating Particles */}
-            <div className="relative h-20">
-              {[...Array(8)].map((_, i) => (
-                <motion.div
-                  key={i}
-                  className="absolute w-3 h-3 bg-inha-blue rounded-full"
-                  style={{
-                    left: `${(i * 12) + 10}%`,
-                  }}
-                  animate={{
-                    y: [-20, -60, -20],
-                    opacity: [0, 1, 0],
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    delay: i * 0.2,
-                    ease: "easeInOut"
-                  }}
-                />
-              ))}
-            </div>
-
-            <motion.p 
-              className="text-gray-500 text-sm mt-4"
-              animate={{ opacity: [0.5, 1, 0.5] }}
-              transition={{ duration: 2, repeat: Infinity }}
-            >
-              잠시만 기다려주세요...
-            </motion.p>
+            <p className="text-gray-500 text-sm mt-4">잠시만 기다려주세요...</p>
           </div>
         </div>
-      </motion.div>);
-
+      </motion.div>
+    );
   }
 
   // 이력서 미등록
   if (viewState === "no-resume") {
     return (
-      <motion.div 
-        className="w-full"
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.9 }}
-      >
-        <div className="bg-gradient-to-br from-amber-50 to-orange-50 p-12 rounded-lg text-center shadow-lg border-2 border-amber-200">
-          <div className="max-w-md mx-auto">
-            <motion.div
-              animate={{ 
-                rotate: [0, 10, -10, 0],
-                scale: [1, 1.1, 1]
-              }}
-              transition={{ 
-                duration: 0.5,
-                repeat: 3,
-              }}
-              className="text-6xl mb-4"
-            >
-              📋
-            </motion.div>
-            
-            <motion.p 
-              className="text-gray-800 font-bold text-lg mb-2"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-            >
-              {t("※ 이력서 정보가 등록되어 있지 않습니다.")}
-            </motion.p>
-            
-            <motion.p 
-              className="text-gray-600 mb-8"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.3 }}
-            >
-              {t("AI 추천을 위해 이력서를 먼저 작성해주세요.")}
-            </motion.p>
-            
-            <motion.button
-              onClick={handleGoToResume}
-              className="px-8 py-3 bg-gradient-to-r from-amber-500 to-orange-500 text-white rounded-lg font-semibold shadow-lg"
-              whileHover={{ scale: 1.05, boxShadow: "0 10px 30px rgba(245, 158, 11, 0.4)" }}
-              whileTap={{ scale: 0.95 }}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-            >
-              <span className="flex items-center gap-2">
-                📝 {t("이력서 관리 페이지로 이동")}
-              </span>
-            </motion.button>
-          </div>
-        </div>
-      </motion.div>);
-
-  }
-
-  // 추천 결과
-  if (viewState === "results" && recommendedLabs) {
-    return (
-      <motion.div 
+      <motion.div
         className="w-full"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
-      >
-        <motion.div
-          initial={{ y: -20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.2 }}
-          className="mb-6"
-        >
-          <div className="flex items-center gap-3 mb-4">
-            <motion.span
-              className="text-4xl"
-              animate={{ 
-                rotate: [0, 360],
-              }}
-              transition={{ 
-                duration: 2,
-                ease: "easeInOut"
-              }}
-            >
-              ✨
-            </motion.span>
-            <h2 className="text-2xl font-bold text-gray-800">{t("AI 연구실 추천 결과")}
-            </h2>
-            <motion.div
-              className="ml-auto px-4 py-2 bg-gradient-to-r from-inha-blue to-blue-600 text-white rounded-full text-sm font-semibold shadow-lg"
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.4, type: "spring" }}
-            >
-              총 {recommendedLabs.length}개 연구실
-            </motion.div>
+        exit={{ opacity: 0 }}>
+        <div className="bg-white p-12 rounded-lg text-center shadow-lg border border-gray-200">
+          <div className="max-w-md mx-auto">
+            <div className="text-6xl mb-4">📋</div>
+
+            <p className="text-gray-800 font-bold text-lg mb-2">
+              {t("※ 이력서 정보가 등록되어 있지 않습니다.")}
+            </p>
+
+            <p className="text-gray-600 mb-8">
+              {t("AI 추천을 위해 이력서를 먼저 작성해주세요.")}
+            </p>
+
+            <button
+              onClick={handleGoToResume}
+              className="px-8 py-3 bg-inha-blue hover:bg-blue-700 text-white rounded-lg font-semibold shadow-lg transition-colors">
+              📝 {t("이력서 관리 페이지로 이동")}
+            </button>
           </div>
-          
-          <motion.p
-            className="text-gray-600"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
-          >
-            당신의 이력서를 분석하여 가장 적합한 연구실을 추천해드립니다.
-          </motion.p>
-        </motion.div>
+        </div>
+      </motion.div>
+    );
+  }
 
-        {/* Results Table */}
-        <motion.div 
-          className="border border-gray-300 overflow-hidden rounded-lg shadow-xl"
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.4 }}
-        >
-          {/* Table Header */}
-          <motion.div 
-            className="grid grid-cols-[80px_1fr_200px_1fr] bg-gradient-to-r from-blue-100 to-indigo-100 border-b border-gray-300 min-w-[700px]"
-            initial={{ x: -20, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ delay: 0.5 }}
-          >
-            <div className="px-4 py-3 text-center font-bold text-gray-800 border-r border-gray-300">{t("순위")}
-            </div>
-            <div className="px-4 py-3 text-center font-bold text-gray-800 border-r border-gray-300">{t("연구실명 / 지도교수 / 연구내용")}
-            </div>
-            <div className="px-4 py-3 text-center font-bold text-gray-800 border-r border-gray-300">{t("적합도 / 예상합격률")}
-            </div>
-            <div className="px-4 py-3 text-center font-bold text-gray-800">{t("추천이유")}
-            </div>
-          </motion.div>
+  // 추천 결과 - 심플한 모달 슬라이더
+  if (viewState === "results" && recommendedLabs) {
+    const totalSlides = recommendedLabs.length;
 
-          {/* Table Body */}
-          <div className="overflow-x-auto">
-            {recommendedLabs.map((lab, index) =>
+    return (
+      <motion.div
+        className="fixed inset-0 bg-black z-50 overflow-hidden"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}>
+        {/* Simple Black Background */}
+        <div className="absolute inset-0 bg-black" />
+
+        {/* Slide Number */}
+        <div className="absolute top-8 left-8 text-white text-sm z-10">
+          {currentSlide + 1} / {totalSlides}
+        </div>
+
+        {/* Help Text */}
+        <div className="absolute top-8 left-1/2 -translate-x-1/2 text-white/60 text-xs z-10">
+          Space/→: 다음 • ←: 이전 • ESC: 닫기
+        </div>
+
+        {/* Main Content - Centered Slide with bottom padding */}
+        <div className="absolute inset-0 flex items-center justify-center p-8 pb-32">
+          <AnimatePresence mode="wait">
             <motion.div
-              key={lab.id}
-              className="grid grid-cols-[80px_1fr_200px_1fr] border-b border-gray-200 hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 transition-all duration-300 min-w-[700px] group"
-              initial={{ x: -50, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              transition={{ 
-                delay: 0.6 + (index * 0.1),
-                type: "spring",
-                stiffness: 100
-              }}
-              whileHover={{ 
-                scale: 1.01,
-                boxShadow: "0 4px 20px rgba(0, 102, 204, 0.1)"
-              }}
-            >
-                {/* Rank with icon */}
-                <div className="px-4 py-6 flex items-center justify-center border-r border-gray-200">
-                  {lab.rank <= 3 ?
-                <motion.div 
-                    className="relative"
-                    whileHover={{ scale: 1.2, rotate: 360 }}
-                    transition={{ type: "spring", stiffness: 300 }}
-                  >
-                      <motion.div 
-                        className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center shadow-lg"
-                        animate={{ 
-                          boxShadow: [
-                            "0 0 0 0 rgba(59, 130, 246, 0.7)",
-                            "0 0 0 10px rgba(59, 130, 246, 0)",
-                          ]
-                        }}
-                        transition={{ 
-                          duration: 1.5,
-                          repeat: Infinity,
-                        }}
-                      >
-                        <span className="text-white text-xl font-bold">
+              key={currentSlide}
+              className="w-full max-w-4xl bg-black/60 rounded-xl p-10 shadow-none border border-white/5 max-h-[calc(100vh-16rem)] overflow-y-auto"
+              initial={{ opacity: 0, x: 100 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -100 }}
+              transition={{ duration: 0.3 }}>
+              {(() => {
+                const lab = recommendedLabs[currentSlide];
+                return (
+                  <>
+                    {/* Rank Badge */}
+                    <div className="inline-flex items-center gap-4 mb-8">
+                      <div className="w-20 h-20 bg-white/10 rounded-full flex items-center justify-center border border-white/20">
+                        <span className="text-white text-3xl font-bold">
                           {lab.rank}
                         </span>
-                      </motion.div>
-                      {lab.rank === 1 &&
-                      <motion.div 
-                          className="absolute -top-1 -right-1 w-6 h-6 bg-yellow-400 rounded-full flex items-center justify-center shadow-md"
-                          animate={{ 
-                            rotate: [0, 360],
-                            scale: [1, 1.2, 1]
-                          }}
-                          transition={{ 
-                            duration: 2,
-                            repeat: Infinity,
-                          }}
-                        >
-                          <span className="text-white text-xs">👑</span>
-                        </motion.div>
-                      }
-                      {lab.rank === 2 &&
-                      <motion.div 
-                          className="absolute -bottom-1 -right-1 w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center shadow-md"
-                          animate={{ rotate: [0, -10, 10, 0] }}
-                          transition={{ 
-                            duration: 1,
-                            repeat: Infinity,
-                          }}
-                        >
-                          <span className="text-white text-xs">🥈</span>
-                        </motion.div>
-                      }
-                      {lab.rank === 3 &&
-                      <motion.div 
-                          className="absolute -bottom-1 -right-1 w-6 h-6 bg-amber-600 rounded-full flex items-center justify-center shadow-md"
-                          animate={{ 
-                            y: [0, -3, 0],
-                          }}
-                          transition={{ 
-                            duration: 1.5,
-                            repeat: Infinity,
-                          }}
-                        >
-                          <span className="text-white text-xs">🥉</span>
-                        </motion.div>
-                      }
-                    </motion.div> :
-
-                <motion.span 
-                    className="text-gray-600 text-lg font-semibold"
-                    whileHover={{ scale: 1.3 }}
-                  >
-                      {lab.rank}
-                    </motion.span>
-                }
-                </div>
-
-                {/* Lab Info */}
-                <div className="px-4 py-6 border-r border-gray-200">
-                  <div className="mb-2">
-                    <motion.a
-                    href="#"
-                    className="text-blue-600 hover:text-blue-700 font-semibold text-base inline-flex items-center gap-1 group-hover:underline"
-                    whileHover={{ x: 5 }}
-                    >
-                      {lab.labName}
-                      <motion.svg
-                      className="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      animate={{ rotate: [0, 15, 0] }}
-                      transition={{ duration: 1, repeat: Infinity, repeatDelay: 2 }}
-                      >
-                        <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-
-                      </motion.svg>
-                    </motion.a>
-                  </div>
-                  <motion.div 
-                    className="text-sm text-gray-600 mb-2"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.8 + (index * 0.1) }}
-                  >
-                    - {lab.professor} / {lab.department}
-                  </motion.div>
-                  <motion.div 
-                    className="text-sm text-gray-700"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.9 + (index * 0.1) }}
-                  >
-                    {t("- 연구내용 :")}
-                    <div className="mt-1 pl-2">
-                      {lab.researchArea.split(",").map((area, idx) =>
-                      <motion.div 
-                          key={idx}
-                          initial={{ x: -10, opacity: 0 }}
-                          animate={{ x: 0, opacity: 1 }}
-                          transition={{ delay: 1.0 + (index * 0.1) + (idx * 0.05) }}
-                        >
-                          • {area.trim()}
-                        </motion.div>
-                      )}
+                      </div>
+                      <div>
+                        <div className="text-white text-base">
+                          순위 #{lab.rank}
+                        </div>
+                        <div className="text-white text-sm font-semibold mt-1">
+                          적합도: {lab.compatibility}
+                        </div>
+                      </div>
                     </div>
-                  </motion.div>
-                </div>
 
-                {/* Compatibility & Acceptance */}
-                <div className="px-4 py-6 border-r border-gray-200 text-center">
-                  <motion.div 
-                    className="mb-4"
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ delay: 1.1 + (index * 0.1), type: "spring" }}
-                  >
-                    <motion.div 
-                      className="text-sm text-gray-600 mb-2 font-medium"
-                      whileHover={{ scale: 1.1 }}
-                    >
-                      {lab.compatibility}
-                    </motion.div>
-                    <motion.div 
-                      className="text-lg font-bold bg-gradient-to-r from-inha-blue to-blue-600 bg-clip-text text-transparent"
-                      animate={{ 
-                        scale: [1, 1.05, 1],
-                      }}
-                      transition={{ 
-                        duration: 2,
-                        repeat: Infinity,
-                        delay: index * 0.2
-                      }}
-                    >
-                      {t("예상합격률")}
-                    </motion.div>
-                  </motion.div>
-                </div>
+                    {/* Lab Name */}
+                    <h2 className="text-5xl font-bold text-white mb-6 leading-tight">
+                      {lab.labName}
+                    </h2>
 
-                {/* Reason */}
-                <motion.div 
-                  className="px-4 py-6 flex items-center"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 1.2 + (index * 0.1) }}
-                >
-                  <div className="text-sm text-gray-700 leading-relaxed">{lab.reason}</div>
-                </motion.div>
-              </motion.div>
-            )}
+                    {/* Professor & Department */}
+                    <div className="text-white text-xl mb-10 flex items-center gap-3">
+                      <span className="font-medium">{lab.professor}</span>
+                      <span className="text-white/60">•</span>
+                      <span className="text-white">{lab.department}</span>
+                    </div>
+
+                    {/* Research Areas */}
+                    <div className="mb-10">
+                      <div className="text-white text-base font-semibold mb-4">
+                        연구 분야
+                      </div>
+                      <div className="flex flex-wrap gap-3">
+                        {lab.researchArea.split(",").map((area, idx) => (
+                          <span
+                            key={idx}
+                            className="px-5 py-2.5 bg-white/10 rounded-full text-white text-base border border-white/20 hover:bg-white/15 transition-colors">
+                            {area.trim()}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Recommendation Reason */}
+                    <div className="mb-10">
+                      <div className="text-white text-base font-semibold mb-4">
+                        추천 이유
+                      </div>
+                      <p className="text-white text-lg leading-relaxed bg-white/8 p-5 rounded-xl border border-white/15">
+                        {lab.reason}
+                      </p>
+                    </div>
+
+                    {/* Expected Acceptance */}
+                    <div className="mt-10 pt-8 border-t border-white/15">
+                      <div className="flex items-center justify-between">
+                        <span className="text-white text-base font-semibold">
+                          {t("예상합격률")}
+                        </span>
+                        <span className="text-3xl font-bold text-white">
+                          {lab.expectedAcceptance}
+                        </span>
+                      </div>
+                    </div>
+                  </>
+                );
+              })()}
+            </motion.div>
+          </AnimatePresence>
+        </div>
+
+        {/* Bottom Navigation */}
+        <div className="absolute bottom-8 left-8 right-8 z-10">
+          <div className="flex gap-2">
+            {recommendedLabs.map((lab, index) => (
+              <button
+                key={lab.id}
+                onClick={() => setCurrentSlide(index)}
+                className="flex-1 cursor-pointer">
+                <div className="mb-2">
+                  <div className="h-1 bg-white/20 rounded-full overflow-hidden">
+                    <div
+                      className="h-full bg-white rounded-full transition-all duration-300"
+                      style={{
+                        width: index === currentSlide ? "100%" : "0%",
+                      }}
+                    />
+                  </div>
+                </div>
+                <div
+                  className={`text-xs transition-colors ${
+                    index === currentSlide
+                      ? "text-white font-semibold"
+                      : "text-white/40"
+                  }`}>
+                  {lab.labName.length > 20
+                    ? lab.labName.substring(0, 20) + "..."
+                    : lab.labName}
+                </div>
+              </button>
+            ))}
           </div>
-        </motion.div>
+        </div>
 
-        {/* Action Button */}
-        <motion.div 
-          className="mt-8 flex justify-center"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.5 }}
-        >
-          <motion.button
-            onClick={() => setViewState("initial")}
-            className="px-8 py-3 bg-gradient-to-r from-gray-600 to-gray-700 text-white rounded-lg font-semibold shadow-lg"
-            whileHover={{ 
-              scale: 1.05,
-              boxShadow: "0 10px 30px rgba(0, 0, 0, 0.2)",
-              background: "linear-gradient(to right, rgb(59, 130, 246), rgb(37, 99, 235))"
-            }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <span className="flex items-center gap-2">
-              <motion.span
-                animate={{ rotate: 360 }}
-                transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-              >
-                🔄
-              </motion.span>
-              {t("다시 추천받기")}
-            </span>
-          </motion.button>
-        </motion.div>
-      </motion.div>);
-
+        {/* Close Button */}
+        <button
+          onClick={() => setViewState("initial")}
+          className="absolute top-8 right-8 w-10 h-10 flex items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors z-10">
+          <svg
+            className="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24">
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
+      </motion.div>
+    );
   }
 
   return null;
