@@ -92,7 +92,7 @@ function wrapUndergradData(data) {
     연번: item.개설연번 || item.연번 || "",
     학과: item.개설학과 || item.학과 || "",
     연구실명: item.연구실명 || "",
-    교수명: item.교수명 || item.지도교수 || "",
+    교수명: item.교수명 || item.지도교수 || item.연구실지도교수 || "",
     연구내용: item.연구내용 || item.내용 || "",
     년도학기: item.년도학기 || item.학년 || "",
   }));
@@ -107,7 +107,8 @@ function wrapGraduateData(data) {
     연번: item.개설연번 || item.연번 || "",
     학과: item.개설학과 || item.학과 || item.운영학과 || "",
     연구실명: item.연구실명 || "",
-    지도교수: item.지도교수 || item.교수명 || "",
+    "연구실 지도교수":
+      item["연구실 지도교수"] || item.지도교수 || item.교수명 || "",
     연구내용: item.연구내용 || item.연구분야 || "",
     년도학기: item.년도학기 || item.학년 || "",
   }));
