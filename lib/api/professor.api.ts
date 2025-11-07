@@ -10,29 +10,22 @@ export interface ApiProfessorInfo {
 
 // 더미 데이터 - 교수 정보
 const DUMMY_PROFESSOR: ApiProfessorInfo = {
-  name: "안정호",
-  department: "컴퓨터공학과",
-  position: "교수",
-  office: "하이테크관 507호",
-  phone: "032-860-7404",
-  email: "jhahn@inha.ac.kr",
-  researchAreas: [
-    "알고리즘",
-    "최적화",
-    "그래프 이론",
-    "조합론",
-    "계산복잡도 이론",
-  ],
+  name: "김민수",
+  department: "전자공학과",
+  position: "부교수",
+  office: "공대 7호관 320호",
+  phone: "02-1234-5678",
+  email: "mskim@university.ac.kr",
+  researchAreas: ["인공지능", "머신러닝", "컴퓨터 비전", "딥러닝", "패턴 인식"],
   education: [
-    "박사 - University of Illinois at Urbana-Champaign, Computer Science (2005)",
-    "석사 - 서울대학교, 컴퓨터공학 (1999)",
-    "학사 - 서울대학교, 컴퓨터공학 (1997)",
+    "박사 - KAIST, 전기및전자공학 (2015)",
+    "석사 - KAIST, 전기및전자공학 (2010)",
+    "학사 - 연세대학교, 전자공학 (2008)",
   ],
-  officeHours: "수요일 14:00-16:00 (사전 예약 필수)",
+  officeHours: "화요일 10:00-12:00, 목요일 15:00-17:00",
   introduction:
-    "안정호 교수는 알고리즘 설계 및 분석, 최적화 이론, 그래프 이론 분야의 전문가입니다. 특히 조합 최적화 문제와 근사 알고리즘 연구에 집중하고 있으며, 이론적 연구와 실제 응용을 연결하는 연구를 수행하고 있습니다.",
+    "김민수 교수는 인공지능 및 머신러닝 분야, 특히 컴퓨터 비전과 딥러닝 응용 연구에 주력하고 있습니다. 자율주행 자동차의 시각 인지 시스템 및 의료 영상 분석을 위한 딥러닝 모델 개발 연구를 활발히 수행 중입니다.",
 };
-
 // 교수 정보 조회
 export const getProfessorInfo = async (): Promise<ApiProfessorInfo> => {
   // 실제 API 호출
