@@ -11,7 +11,7 @@ interface Props {
 export default function BasicInfoSection({ data }: Props) {
   const { t } = useTranslation();
   return (
-    <Section title={t("기본 정보")} icon="▶">
+    <Section title={t("기본 정보")} icon="/user_profile.svg">
       <div className="p-6">
         <div className="grid grid-cols-2 gap-6">
           {/* Left Column */}

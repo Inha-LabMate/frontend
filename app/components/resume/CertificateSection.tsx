@@ -36,7 +36,7 @@ export default function CertificateSection({ data }: Props) {const { t } = useTr
 
   return (
     <>
-      <Section title={t("자격증")} icon="▶" onAdd={() => setIsModalOpen(true)}>
+      <Section title={t("자격증")} icon="/play-circle.svg" onAdd={() => setIsModalOpen(true)}>
         {data.length === 0 ?
         <div className="p-6 text-center text-gray-500">{t("등록된 자격증이 없습니다.")}
 

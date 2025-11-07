@@ -11,7 +11,7 @@ interface Props {
 export default function EducationSection({ data }: Props) {
   const { t } = useTranslation();
   return (
-    <Section title={t("학적 정보")} icon="▶">
+    <Section title={t("학적 정보")} icon="/play-circle.svg">
       <div className="p-6">
         <div className="grid grid-cols-2 gap-6">
           {/* Left Column */}

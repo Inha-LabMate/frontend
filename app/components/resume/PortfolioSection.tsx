@@ -150,7 +150,7 @@ export default function PortfolioSection({ data }: Props) {
     <>
       <Section
         title={t("기타첨부파일(포트폴리오)")}
-        icon="▶"
+        icon="/play-circle.svg"
         onAdd={() => setIsModalOpen(true)}>
         {data.length === 0 ? (
           <div className="p-6 text-center text-black">

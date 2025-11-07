@@ -49,7 +49,7 @@ export default function LanguageSection({ data }: Props) {
     <>
       <Section
         title={t("언어 능력")}
-        icon="▶"
+        icon="/play-circle.svg"
         onAdd={() => setIsModalOpen(true)}>
         {data.length === 0 ? (
           <div className="p-6 text-center text-black">

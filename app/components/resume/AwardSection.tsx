@@ -32,7 +32,7 @@ export default function AwardSection({ data }: Props) {const { t } = useTranslat
 
   return (
     <>
-      <Section title={t("수상경력")} icon="▶" onAdd={() => setIsModalOpen(true)}>
+      <Section title={t("수상경력")} icon="/play-circle.svg" onAdd={() => setIsModalOpen(true)}>
         {data.length === 0 ?
         <div className="p-6 text-center text-gray-500">{t("등록된 수상경력이 없습니다.")}
 

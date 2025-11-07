@@ -110,7 +110,9 @@ export default function CoverLetterTab() {
               }
               maxLength={300}
               className="w-full min-h-[120px] px-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-inha-blue focus:border-transparent resize-none"
-              placeholder={t("관심 있는 연구 주제나 배우고 싶은 내용을 작성해주세요.")}
+              placeholder={t(
+                "관심 있는 연구 주제나 배우고 싶은 내용을 작성해주세요."
+              )}
             />
             <div className="text-right text-xs text-gray-500 mt-1">
               {getCharCount(answers.question3)}
