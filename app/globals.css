@@ -109,31 +109,70 @@ body {
 
 /* 흰색/밝은 배경 - 검정색 텍스트 (자식 요소 포함) */
 .bg-white,
-.bg-white *:not(.text-white):not(.text-inha-blue):not(.text-red-500):not(.text-blue-500):not(.text-green-500):not(.text-yellow-500),
+.bg-white
+  *:not(.text-white):not(.text-inha-blue):not(.text-red-500):not(
+    .text-blue-500
+  ):not(.text-green-500):not(.text-yellow-500),
 .bg-gray-50,
-.bg-gray-50 *:not(.text-white):not(.text-inha-blue):not(.text-red-500):not(.text-blue-500):not(.text-green-500):not(.text-yellow-500),
+.bg-gray-50
+  *:not(.text-white):not(.text-inha-blue):not(.text-red-500):not(
+    .text-blue-500
+  ):not(.text-green-500):not(.text-yellow-500),
 .bg-gray-100,
-.bg-gray-100 *:not(.text-white):not(.text-inha-blue):not(.text-red-500):not(.text-blue-500):not(.text-green-500):not(.text-yellow-500),
+.bg-gray-100
+  *:not(.text-white):not(.text-inha-blue):not(.text-red-500):not(
+    .text-blue-500
+  ):not(.text-green-500):not(.text-yellow-500),
 .bg-gray-200,
-.bg-gray-200 *:not(.text-white):not(.text-inha-blue):not(.text-red-500):not(.text-blue-500):not(.text-green-500):not(.text-yellow-500),
+.bg-gray-200
+  *:not(.text-white):not(.text-inha-blue):not(.text-red-500):not(
+    .text-blue-500
+  ):not(.text-green-500):not(.text-yellow-500),
 .bg-gray-300,
-.bg-gray-300 *:not(.text-white):not(.text-inha-blue):not(.text-red-500):not(.text-blue-500):not(.text-green-500):not(.text-yellow-500),
+.bg-gray-300
+  *:not(.text-white):not(.text-inha-blue):not(.text-red-500):not(
+    .text-blue-500
+  ):not(.text-green-500):not(.text-yellow-500),
 .bg-blue-50,
-.bg-blue-50 *:not(.text-white):not(.text-inha-blue):not(.text-red-500):not(.text-blue-500):not(.text-green-500):not(.text-yellow-500),
+.bg-blue-50
+  *:not(.text-white):not(.text-inha-blue):not(.text-red-500):not(
+    .text-blue-500
+  ):not(.text-green-500):not(.text-yellow-500),
 .bg-blue-100,
-.bg-blue-100 *:not(.text-white):not(.text-inha-blue):not(.text-red-500):not(.text-blue-500):not(.text-green-500):not(.text-yellow-500),
+.bg-blue-100
+  *:not(.text-white):not(.text-inha-blue):not(.text-red-500):not(
+    .text-blue-500
+  ):not(.text-green-500):not(.text-yellow-500),
 .bg-green-50,
-.bg-green-50 *:not(.text-white):not(.text-inha-blue):not(.text-red-500):not(.text-blue-500):not(.text-green-500):not(.text-yellow-500),
+.bg-green-50
+  *:not(.text-white):not(.text-inha-blue):not(.text-red-500):not(
+    .text-blue-500
+  ):not(.text-green-500):not(.text-yellow-500),
 .bg-green-100,
-.bg-green-100 *:not(.text-white):not(.text-inha-blue):not(.text-red-500):not(.text-blue-500):not(.text-green-500):not(.text-yellow-500),
+.bg-green-100
+  *:not(.text-white):not(.text-inha-blue):not(.text-red-500):not(
+    .text-blue-500
+  ):not(.text-green-500):not(.text-yellow-500),
 .bg-yellow-50,
-.bg-yellow-50 *:not(.text-white):not(.text-inha-blue):not(.text-red-500):not(.text-blue-500):not(.text-green-500):not(.text-yellow-500),
+.bg-yellow-50
+  *:not(.text-white):not(.text-inha-blue):not(.text-red-500):not(
+    .text-blue-500
+  ):not(.text-green-500):not(.text-yellow-500),
 .bg-yellow-100,
-.bg-yellow-100 *:not(.text-white):not(.text-inha-blue):not(.text-red-500):not(.text-blue-500):not(.text-green-500):not(.text-yellow-500),
+.bg-yellow-100
+  *:not(.text-white):not(.text-inha-blue):not(.text-red-500):not(
+    .text-blue-500
+  ):not(.text-green-500):not(.text-yellow-500),
 .bg-red-50,
-.bg-red-50 *:not(.text-white):not(.text-inha-blue):not(.text-red-500):not(.text-blue-500):not(.text-green-500):not(.text-yellow-500),
+.bg-red-50
+  *:not(.text-white):not(.text-inha-blue):not(.text-red-500):not(
+    .text-blue-500
+  ):not(.text-green-500):not(.text-yellow-500),
 .bg-red-100,
-.bg-red-100 *:not(.text-white):not(.text-inha-blue):not(.text-red-500):not(.text-blue-500):not(.text-green-500):not(.text-yellow-500) {
+.bg-red-100
+  *:not(.text-white):not(.text-inha-blue):not(.text-red-500):not(
+    .text-blue-500
+  ):not(.text-green-500):not(.text-yellow-500) {
   color: black !important;
 }
 
@@ -184,4 +223,94 @@ input:-webkit-autofill:active {
   -webkit-box-shadow: 0 0 0 30px white inset !important;
   -webkit-text-fill-color: black !important;
   box-shadow: 0 0 0 30px white inset !important;
+}
+
+/* ========================================
+   Custom Scrollbar Styles
+   ======================================== */
+
+/* 커스텀 스크롤바 - 모달용 */
+.scrollbar-custom {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) rgba(255, 255, 255, 0.1);
+}
+
+/* Webkit browsers (Chrome, Safari, Edge) */
+.scrollbar-custom::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.scrollbar-custom::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+  transition: background 0.3s ease;
+}
+
+.scrollbar-custom::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* 스크롤 애니메이션 */
+.scrollbar-custom {
+  scroll-behavior: smooth;
+}
+
+/* 스크롤 시 fade-in 효과 */
+@keyframes fadeInOnScroll {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 스크롤 컨테이너 */
+.scroll-fade-in > * {
+  animation: fadeInOnScroll 0.6s ease-out;
+  animation-fill-mode: both;
+}
+
+/* 스크롤 시 순차적 애니메이션 */
+.scroll-fade-in > *:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.scroll-fade-in > *:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.scroll-fade-in > *:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.scroll-fade-in > *:nth-child(4) {
+  animation-delay: 0.4s;
+}
+.scroll-fade-in > *:nth-child(5) {
+  animation-delay: 0.5s;
+}
+
+/* 일반 스크롤바 (페이지 전체) */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }

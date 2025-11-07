@@ -1,19 +1,15 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useTranslation } from "i18nexus";
 import {
   getSelfIntroFromStorage,
   saveSelfIntroToStorage,
-  deleteSelfIntroFromStorage,
   getEmptySelfIntro,
   type SelfIntroData,
 } from "../../../lib/utils/resume-storage";
 
 export default function SelfIntroSection() {
-  const { t } = useTranslation();
   const [formData, setFormData] = useState<SelfIntroData>(getEmptySelfIntro());
-  const [isSaved, setIsSaved] = useState(false);
   const [showSaveAlert, setShowSaveAlert] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
@@ -40,7 +36,6 @@ export default function SelfIntroSection() {
       ...prev,
       [name]: value,
     }));
-    setIsSaved(false);
   };
 
   const handleSave = () => {
@@ -52,7 +47,6 @@ export default function SelfIntroSection() {
       const success = saveSelfIntroToStorage(formData);
 
       if (success) {
-        setIsSaved(true);
         setShowSaveAlert(true);
         console.log("✅ 저장 완료!");
 
@@ -70,9 +64,6 @@ export default function SelfIntroSection() {
         alert("저장에 실패했습니다. 콘솔을 확인해주세요.");
       }
 
-      // 2초 후 저장 상태 초기화
-      setTimeout(() => setIsSaved(false), 2000);
-
       // 3초 후 알림 메시지 숨김
       setTimeout(() => setShowSaveAlert(false), 3000);
     } catch (error) {
@@ -84,22 +75,8 @@ export default function SelfIntroSection() {
     }
   };
 
-  const handleReset = () => {
-    if (confirm("자기소개서 데이터를 모두 삭제하시겠습니까?")) {
-      const success = deleteSelfIntroFromStorage();
-      if (success) {
-        setFormData(getEmptySelfIntro());
-        setIsSaved(false);
-        console.log("✅ 초기화 완료!");
-      } else {
-        console.error("❌ 초기화 실패!");
-        alert("초기화에 실패했습니다.");
-      }
-    }
-  };
-
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* 저장 완료 알림 */}
       {showSaveAlert && (
         <div className="fixed top-4 right-4 z-50 animate-in fade-in slide-in-from-top-2">
@@ -121,258 +98,106 @@ export default function SelfIntroSection() {
         </div>
       )}
 
-      {/* 헤더 */}
-      <div className="flex items-center justify-between">
-        <h3 className="text-lg font-semibold text-gray-800">
-          {t("자기소개서")}
-        </h3>
-        <div className="flex gap-2">
-          <button
-            onClick={handleReset}
-            className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-            초기화
-          </button>
-          <button
-            onClick={handleSave}
-            className={`px-4 py-2 text-sm text-white rounded-lg transition-colors ${
-              isSaved
-                ? "bg-green-600 hover:bg-green-700"
-                : "bg-inha-blue hover:bg-blue-700"
-            }`}>
-            {isSaved ? "✓ 저장됨" : "저장"}
-          </button>
-        </div>
-      </div>
-
-      {/* 폼 필드들 */}
-      <div className="space-y-4">
-        {/* 연구 관심 분야 */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            연구 관심 분야
-          </label>
-          <input
-            type="text"
-            name="research_interests"
-            value={formData.research_interests}
-            onChange={handleChange}
-            placeholder="예: 네트워크 보안, 무선 통신, IoT 시스템"
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-inha-blue focus:border-transparent"
-          />
-        </div>
-
-        {/* 자기소개 1 */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            자기소개 1 - 관심사 및 연구 분야
-          </label>
-          <textarea
-            name="intro1"
-            value={formData.intro1}
-            onChange={handleChange}
-            rows={3}
-            placeholder="관심 있는 연구 분야와 구체적인 연구 주제를 작성해주세요."
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-inha-blue focus:border-transparent resize-none"
-          />
-        </div>
-
-        {/* 자기소개 2 */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            자기소개 2 - 기술 및 경험
-          </label>
-          <textarea
-            name="intro2"
-            value={formData.intro2}
-            onChange={handleChange}
-            rows={3}
-            placeholder="보유하고 있는 기술 스택과 관련 프로젝트 경험을 작성해주세요."
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-inha-blue focus:border-transparent resize-none"
-          />
-        </div>
-
-        {/* 자기소개 3 */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            자기소개 3 - 연구 목표
-          </label>
-          <textarea
-            name="intro3"
-            value={formData.intro3}
-            onChange={handleChange}
-            rows={3}
-            placeholder="대학원에서 수행하고 싶은 연구 목표를 작성해주세요."
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-inha-blue focus:border-transparent resize-none"
-          />
-        </div>
-
-        {/* 포트폴리오/프로젝트 */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            포트폴리오 / 프로젝트
-          </label>
-          <textarea
-            name="portfolio"
-            value={formData.portfolio}
-            onChange={handleChange}
-            rows={4}
-            placeholder="[프로젝트 1] 프로젝트명 및 설명&#10;[프로젝트 2] 프로젝트명 및 설명"
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-inha-blue focus:border-transparent resize-none"
-          />
-        </div>
-
-        {/* 2열 레이아웃 시작 */}
-        <div className="grid grid-cols-2 gap-4">
-          {/* 전공 */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              전공
-            </label>
-            <input
-              type="text"
-              name="major"
-              value={formData.major}
-              onChange={handleChange}
-              placeholder="예: 컴퓨터공학"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-inha-blue focus:border-transparent"
-            />
-          </div>
-
-          {/* 학점 */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              학점 (GPA)
-            </label>
-            <input
-              type="text"
-              name="gpa"
-              value={formData.gpa}
-              onChange={handleChange}
-              placeholder="예: 3.9"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-inha-blue focus:border-transparent"
-            />
-          </div>
-        </div>
-
-        {/* 자격증 */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            자격증
-          </label>
-          <input
-            type="text"
-            name="certifications"
-            value={formData.certifications}
-            onChange={handleChange}
-            placeholder="예: 정보처리기사, 정보보안기사"
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-inha-blue focus:border-transparent"
-          />
-        </div>
-
-        {/* 수상 경력 */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            수상 경력
-          </label>
-          <input
-            type="text"
-            name="awards"
-            value={formData.awards}
-            onChange={handleChange}
-            placeholder="예: 네트워크 보안 경진대회 우수상, 사이버 보안 해커톤 장려상"
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-inha-blue focus:border-transparent"
-          />
-        </div>
-
-        {/* 기술 스택 */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">
-            기술 스택
-          </label>
-          <input
-            type="text"
-            name="tech_stack"
-            value={formData.tech_stack}
-            onChange={handleChange}
-            placeholder="예: Python, C, Wireshark, Scapy, Docker, Kali Linux"
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-inha-blue focus:border-transparent"
-          />
-        </div>
-
-        {/* 2열 레이아웃 - 영어 능력 */}
-        <div className="grid grid-cols-2 gap-4">
-          {/* TOEIC 점수 */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              TOEIC 점수
-            </label>
-            <input
-              type="text"
-              name="toeic_score"
-              value={formData.toeic_score}
-              onChange={handleChange}
-              placeholder="예: 880"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-inha-blue focus:border-transparent"
-            />
-          </div>
-
-          {/* 영어 능력 */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              영어 능력
-            </label>
-            <select
-              name="english_proficiency"
-              value={formData.english_proficiency}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-inha-blue focus:border-transparent">
-              <option value="">선택</option>
-              <option value="상">상</option>
-              <option value="중">중</option>
-              <option value="하">하</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      {/* 버튼 그룹 */}
-      <div className="flex justify-end gap-3 mt-6">
+      {/* 저장 버튼 - 오른쪽 상단 */}
+      <div className="flex justify-end">
         <button
-          type="button"
-          onClick={handleReset}
-          disabled={isSaving}
-          className="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
-          초기화
-        </button>
-        <button
-          type="button"
           onClick={handleSave}
           disabled={isSaving}
-          className={`px-6 py-2 rounded-lg transition-colors disabled:cursor-not-allowed ${
-            isSaving
-              ? "bg-gray-400 text-white cursor-wait"
-              : isSaved
-              ? "bg-green-500 text-white"
-              : "bg-inha-blue text-white hover:bg-blue-700"
-          }`}>
-          {isSaving ? "저장 중..." : isSaved ? "✓ 저장 완료" : "저장"}
+          className="px-6 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors disabled:opacity-50">
+          저장
         </button>
+      </div>
+
+      {/* 자기소개서 작성 섹션 */}
+      <div className="border border-gray-300">
+        {/* 헤더 */}
+        <div className="bg-inha-blue text-white px-4 py-3 flex items-center gap-2">
+          <span className="text-lg">▶</span>
+          <span className="font-medium">자기소개서 작성</span>
+        </div>
+
+        {/* 문항들 */}
+        <div className="divide-y divide-gray-300">
+          {/* 문항 1 */}
+          <div className="grid grid-cols-12">
+            <div className="col-span-3 bg-gray-100 p-4 border-r border-gray-300">
+              <div className="font-medium text-gray-800">문항 1</div>
+              <div className="text-sm text-inha-blue mt-1">
+                : 지원 동기 (500자 이내)
+              </div>
+            </div>
+            <div className="col-span-9 p-4">
+              <textarea
+                name="intro1"
+                value={formData.intro1}
+                onChange={handleChange}
+                rows={6}
+                maxLength={500}
+                placeholder="해당 연구실에 지원하게 된 동기를 작성해주세요."
+                className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-1 focus:ring-inha-blue resize-none"
+              />
+              <div className="text-right text-xs text-gray-600 mt-1">
+                {formData.intro1.length}/500
+              </div>
+            </div>
+          </div>
+
+          {/* 문항 2 */}
+          <div className="grid grid-cols-12">
+            <div className="col-span-3 bg-gray-100 p-4 border-r border-gray-300">
+              <div className="font-medium text-gray-800">문항 2</div>
+              <div className="text-sm text-inha-blue mt-1">
+                : 관련 경험 및 프로젝트
+              </div>
+            </div>
+            <div className="col-span-9 p-4">
+              <textarea
+                name="intro2"
+                value={formData.intro2}
+                onChange={handleChange}
+                rows={8}
+                maxLength={800}
+                placeholder="관련 수업, 프로젝트, 동아리 활동 등의 경험이 있다면 작성해주세요."
+                className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-1 focus:ring-inha-blue resize-none"
+              />
+              <div className="text-right text-xs text-gray-600 mt-1">
+                {formData.intro2.length}/800
+              </div>
+            </div>
+          </div>
+
+          {/* 문항 3 */}
+          <div className="grid grid-cols-12">
+            <div className="col-span-3 bg-gray-100 p-4 border-r border-gray-300">
+              <div className="font-medium text-gray-800">문항 3</div>
+              <div className="text-sm text-inha-blue mt-1">
+                : 관심 연구 분야 (300자 이내)
+              </div>
+            </div>
+            <div className="col-span-9 p-4">
+              <textarea
+                name="intro3"
+                value={formData.intro3}
+                onChange={handleChange}
+                rows={5}
+                maxLength={300}
+                placeholder="관심 있는 연구 주제나 배우고 싶은 내용을 작성해주세요."
+                className="w-full px-3 py-2 border border-gray-300 focus:outline-none focus:ring-1 focus:ring-inha-blue resize-none"
+              />
+              <div className="text-right text-xs text-gray-600 mt-1">
+                {formData.intro3.length}/300
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* 에러 메시지 */}
       {saveError && (
-        <div className="mt-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm">
+        <div className="mt-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded text-sm">
           ⚠️ {saveError}
         </div>
       )}
-
-      {/* 안내 메시지 */}
-      <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-        <p className="text-sm text-blue-800">
-          💡 작성한 자기소개서 데이터는 로컬스토리지에 저장되며, AI 연구실 추천
-          시 자동으로 활용됩니다.
-        </p>
-      </div>
     </div>
   );
 }

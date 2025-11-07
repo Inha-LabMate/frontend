@@ -1,10 +1,12 @@
-"use client";import { useTranslation } from "i18nexus";
+"use client";
 
+import { useTranslation } from "i18nexus";
 import { useState } from "react";
-import ResumeTab from "../../components/resume/ResumeTab";
-import CoverLetterTab from "../../components/resume/CoverLetterTab";
+import ResumeSection from "../../components/resume/ResumeSection";
+import SelfIntroSection from "../../components/resume/SelfIntroSection";
 
-export default function ResumePage() {const { t } = useTranslation();
+export default function ResumePage() {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<"resume" | "cover">("resume");
 
   return (
@@ -12,10 +14,11 @@ export default function ResumePage() {const { t } = useTranslation();
       {/* Title and Breadcrumb */}
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-800 mb-2">
-          <span className="text-inha-blue">■</span>{t("이력서 관리")}
+          <span className="text-inha-blue">■</span>
+          {t("이력서 관리")}
         </h1>
-        <div className="text-sm text-gray-500 mb-4">{t("홈 > 대학원(학적) > 이력서 관리")}
-
+        <div className="text-sm text-gray-500 mb-4">
+          {t("홈 > 대학원(학적) > 이력서 관리")}
         </div>
         <hr className="border-gray-200" />
       </div>
@@ -25,25 +28,25 @@ export default function ResumePage() {const { t } = useTranslation();
         <button
           onClick={() => setActiveTab("resume")}
           className={`px-8 py-3 text-sm font-medium transition-colors relative ${
-          activeTab === "resume" ?
-          "bg-inha-blue text-white" :
-          "bg-gray-100 text-gray-600 hover:bg-gray-200"}`
-          }>{t("이력서")}
-
+            activeTab === "resume"
+              ? "bg-inha-blue text-white"
+              : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+          }`}>
+          {t("이력서")}
         </button>
         <button
           onClick={() => setActiveTab("cover")}
           className={`px-8 py-3 text-sm font-medium transition-colors relative ${
-          activeTab === "cover" ?
-          "bg-inha-blue text-white" :
-          "bg-gray-100 text-gray-600 hover:bg-gray-200"}`
-          }>{t("자기소개서")}
-
+            activeTab === "cover"
+              ? "bg-inha-blue text-white"
+              : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+          }`}>
+          {t("자기소개서")}
         </button>
       </div>
 
       {/* Tab Content */}
-      {activeTab === "resume" ? <ResumeTab /> : <CoverLetterTab />}
-    </>);
-
+      {activeTab === "resume" ? <ResumeSection /> : <SelfIntroSection />}
+    </>
+  );
 }

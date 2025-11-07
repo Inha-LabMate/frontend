@@ -11,6 +11,7 @@ import {
   adaptRecommendedLabs,
   adaptResumeStatus,
 } from "../adapters/research-labs.adapter";
+import { type SelfIntroData } from "../store/resume-store";
 
 /**
  * 학부연구생 연구실 목록 조회
@@ -59,8 +60,8 @@ export const useResumeStatus = () => {
  */
 export const useRecommendedLabs = () => {
   return useMutation({
-    mutationFn: async () => {
-      const data = await researchLabsApi.getRecommendedLabs();
+    mutationFn: async (selfIntroData: SelfIntroData) => {
+      const data = await researchLabsApi.getRecommendedLabs(selfIntroData);
       return adaptRecommendedLabs(data);
     },
   });

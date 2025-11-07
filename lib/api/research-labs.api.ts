@@ -4,9 +4,9 @@
  */
 
 import {
-  getSelfIntroFromStorage,
   formatSelfIntroForAI,
-} from "../utils/resume-storage";
+  type SelfIntroData,
+} from "../store/resume-store";
 
 // API Response 타입 (서버에서 받는 원본 데이터)
 export interface ApiRecommendedLab {
@@ -101,10 +101,11 @@ export const researchLabsApi = {
 
   /**
    * AI 기반 연구실 추천 (이력서 기반)
+   * @param selfIntroData - Zustand store에서 전달받은 자기소개서 데이터
    */
-  getRecommendedLabs: async (): Promise<ApiRecommendedLab[]> => {
-    // 로컬스토리지에서 자기소개서 데이터 가져오기
-    const selfIntroData = getSelfIntroFromStorage();
+  getRecommendedLabs: async (
+    selfIntroData: SelfIntroData
+  ): Promise<ApiRecommendedLab[]> => {
     const formattedSelfIntro = formatSelfIntroForAI(selfIntroData);
 
     console.log("📄 자기소개서 데이터 (포맷팅됨):\n", formattedSelfIntro);

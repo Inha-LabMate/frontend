@@ -8,6 +8,7 @@ import {
 } from "../../lib/hooks/useResearchLabs";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
+import { useResumeStore } from "../../lib/store/resume-store";
 
 type ViewState = "initial" | "loading" | "results" | "no-resume";
 
@@ -18,6 +19,9 @@ export default function AIRecommendation() {
   const [loadingText, setLoadingText] = useState("");
   const [currentSlide, setCurrentSlide] = useState(0);
   const router = useRouter();
+
+  // Zustand store에서 자기소개서 데이터 가져오기
+  const selfIntro = useResumeStore((state) => state.selfIntro);
 
   const { data: resumeStatus } = useResumeStatus();
   const {
@@ -75,7 +79,8 @@ export default function AIRecommendation() {
     // 이력서 확인
     if (resumeStatus?.hasResume) {
       setTimeout(() => {
-        getRecommendations(undefined, {
+        // Zustand store의 자기소개서 데이터를 전달
+        getRecommendations(selfIntro, {
           onSuccess: () => {
             setTimeout(() => {
               setViewState("results");
@@ -256,6 +261,25 @@ export default function AIRecommendation() {
         {/* Simple Black Background */}
         <div className="absolute inset-0 bg-black" />
 
+        {/* Close Button - Top Right */}
+        <button
+          onClick={() => setViewState("initial")}
+          className="absolute top-8 right-8 z-20 w-12 h-12 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 border border-white/20 transition-colors group"
+          aria-label="닫기">
+          <svg
+            className="w-6 h-6 text-white group-hover:text-white/80 transition-colors"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24">
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
+
         {/* Slide Number */}
         <div className="absolute top-8 left-8 text-white text-sm z-10">
           {currentSlide + 1} / {totalSlides}
@@ -266,20 +290,25 @@ export default function AIRecommendation() {
           Space/→: 다음 • ←: 이전 • ESC: 닫기
         </div>
 
-        {/* Main Content - Centered Slide with bottom padding */}
+        {/* Main Content - Centered Slide with custom scrollbar */}
         <div className="absolute inset-0 flex items-center justify-center p-8 pb-32">
           <AnimatePresence mode="wait">
             <motion.div
               key={currentSlide}
-              className="w-full max-w-4xl bg-black/60 rounded-xl p-10 shadow-none border border-white/5 max-h-[calc(100vh-16rem)] overflow-y-auto"
+              className="w-full max-w-4xl bg-black/60 rounded-xl p-10 shadow-none border border-white/5 max-h-[calc(100vh-16rem)] overflow-y-auto scrollbar-custom"
               initial={{ opacity: 0, x: 100 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -100 }}
-              transition={{ duration: 0.3 }}>
+              transition={{ duration: 0.3 }}
+              style={{
+                scrollbarWidth: "thin",
+                scrollbarColor:
+                  "rgba(255, 255, 255, 0.3) rgba(255, 255, 255, 0.1)",
+              }}>
               {(() => {
                 const lab = recommendedLabs[currentSlide];
                 return (
-                  <>
+                  <div className="scroll-fade-in">
                     {/* Rank Badge */}
                     <div className="inline-flex items-center gap-4 mb-8">
                       <div className="w-20 h-20 bg-white/10 rounded-full flex items-center justify-center border border-white/20">
@@ -346,7 +375,7 @@ export default function AIRecommendation() {
                         </span>
                       </div>
                     </div>
-                  </>
+                  </div>
                 );
               })()}
             </motion.div>
