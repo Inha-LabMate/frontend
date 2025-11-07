@@ -160,11 +160,11 @@ export const researchLabsApi = {
           {
             id: 1,
             rank: 1,
-            department: "컴퓨터공학과",
-            labName: "금융 인공지능 연구실",
-            professor: "김동국 교수님",
+            department: "전기컴퓨터공학과",
+            labName: "고성능 임베디드 시스템 연구실",
+            professor: "박준석 교수님",
             researchArea:
-              "금융 시계열 예측, 금융 자연어 처리, 인공지능 기반 포트폴리오 관리, 머신러닝/딥러닝 자동화",
+              "임베디드 시스템 설계 및 최적화, IoT 센서 네트워크, 실시간 운영체제(RTOS), 에지 컴퓨팅, 저전력 하드웨어 가속기 개발",
             compatibility: "높음",
             expectedAcceptance: "높음",
             reason: getRecommendationReason(1),
@@ -172,11 +172,11 @@ export const researchLabsApi = {
           {
             id: 2,
             rank: 2,
-            department: "컴퓨터공학과",
-            labName: "감성 인공지능 연구실",
-            professor: "김병령 교수님",
+            department: "전기컴퓨터공학과",
+            labName: "지능형 전력 시스템 연구실",
+            professor: "이상훈 교수님",
             researchArea:
-              "감성 컴퓨팅(Affective Computing), 뇌-컴퓨터 인터페이스(Brain-Computer Interface), 기계학습(Machine Learning)",
+              "스마트 그리드 제어 시스템, 신재생 에너지 통합 기술, 전력 품질 분석 및 개선, 배터리 관리 시스템(BMS), 전력 변환 장치 설계",
             compatibility: "높음",
             expectedAcceptance: "중간",
             reason: getRecommendationReason(2),
@@ -184,11 +184,11 @@ export const researchLabsApi = {
           {
             id: 3,
             rank: 3,
-            department: "컴퓨터공학과",
-            labName: "지능형 클라우드\n및 네트워크 연구실",
-            professor: "김영진 교수님",
+            department: "전기컴퓨터공학과",
+            labName: "차세대 통신 및 신호처리 연구실",
+            professor: "김현우 교수님",
             researchArea:
-              "Mobile/edge/cloud computing, Artificial intelligence, Optimization",
+              "5G/6G 무선 통신 시스템, MIMO 안테나 설계, 디지털 신호처리(DSP), 채널 코딩 및 변조 기법, 초고속 통신 프로토콜 개발",
             compatibility: "중간",
             expectedAcceptance: "중간",
             reason: getRecommendationReason(3),

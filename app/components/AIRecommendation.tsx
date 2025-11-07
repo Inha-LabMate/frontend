@@ -373,7 +373,9 @@ export default function AIRecommendation() {
 
                     {/* Professor & Department */}
                     <div className="text-white text-xl mb-10 flex items-center gap-3">
-                      <span className="font-medium">{lab.professor}</span>
+                      <span className="font-medium text-white">
+                        {lab.professor}
+                      </span>
                       <span className="text-white/60">•</span>
                       <span className="text-white">{lab.department}</span>
                     </div>
