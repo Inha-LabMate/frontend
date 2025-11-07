@@ -13,6 +13,8 @@ export default function SelfIntroSection() {
   const [showSaveAlert, setShowSaveAlert] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
+  const [showBulkInputModal, setShowBulkInputModal] = useState(false);
+  const [bulkText, setBulkText] = useState("");
 
   // 컴포넌트 마운트 시 로컬스토리지에서 데이터 불러오기
   useEffect(() => {
@@ -75,6 +77,63 @@ export default function SelfIntroSection() {
     }
   };
 
+  // 텍스트 파싱 함수
+  const parseBulkText = (text: string) => {
+    const sections = {
+      intro1: "",
+      intro2: "",
+      intro3: "",
+    };
+
+    // 정규식 패턴: "1", "2", "3" 또는 1번, 2번, 3번 또는 1., 2., 3. 또는 1:, 2:, 3:
+    const patterns = [
+      /["']?1["']?\s*[번\.:]?\s*:?\s*([\s\S]*?)(?=["']?2["']?\s*[번\.:]?|$)/i,
+      /["']?2["']?\s*[번\.:]?\s*:?\s*([\s\S]*?)(?=["']?3["']?\s*[번\.:]?|$)/i,
+      /["']?3["']?\s*[번\.:]?\s*:?\s*([\s\S]*)/i,
+    ];
+
+    patterns.forEach((pattern, index) => {
+      const match = text.match(pattern);
+      if (match && match[1]) {
+        const content = match[1].trim();
+        if (index === 0) sections.intro1 = content;
+        else if (index === 1) sections.intro2 = content;
+        else if (index === 2) sections.intro3 = content;
+      }
+    });
+
+    return sections;
+  };
+
+  const handleBulkInput = () => {
+    if (!bulkText.trim()) {
+      alert("텍스트를 입력해주세요.");
+      return;
+    }
+
+    const parsed = parseBulkText(bulkText);
+
+    // 파싱 결과 확인
+    if (!parsed.intro1 && !parsed.intro2 && !parsed.intro3) {
+      alert(
+        "문항을 찾을 수 없습니다.\n\n예시:\n1번 : 내용\n2번 : 내용\n3번 : 내용"
+      );
+      return;
+    }
+
+    setFormData((prev) => ({
+      ...prev,
+      intro1: parsed.intro1 || prev.intro1,
+      intro2: parsed.intro2 || prev.intro2,
+      intro3: parsed.intro3 || prev.intro3,
+    }));
+
+    setShowBulkInputModal(false);
+    setBulkText("");
+
+    alert("자기소개서가 자동으로 입력되었습니다!");
+  };
+
   return (
     <div className="space-y-4">
       {/* 저장 완료 알림 */}
@@ -98,8 +157,107 @@ export default function SelfIntroSection() {
         </div>
       )}
 
+      {/* 한번에 입력하기 모달 */}
+      {showBulkInputModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col">
+            {/* 모달 헤더 */}
+            <div className="bg-inha-blue text-white px-6 py-4 flex items-center justify-between">
+              <h3 className="text-lg font-semibold">
+                📝 자기소개서 한번에 입력하기
+              </h3>
+              <button
+                onClick={() => {
+                  setShowBulkInputModal(false);
+                  setBulkText("");
+                }}
+                className="text-white hover:text-gray-200 text-2xl leading-none">
+                ×
+              </button>
+            </div>
+
+            {/* 모달 내용 */}
+            <div className="p-6 overflow-y-auto flex-1">
+              <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                <h4 className="font-semibold text-blue-900 mb-2">
+                  💡 사용 방법
+                </h4>
+                <div className="text-sm text-blue-800 space-y-1">
+                  <p>• 아래 텍스트 영역에 자기소개서 전체를 붙여넣으세요.</p>
+                  <p>
+                    • 문항 구분:{" "}
+                    <code className="bg-blue-100 px-1 rounded">1번</code>,{" "}
+                    <code className="bg-blue-100 px-1 rounded">2번</code>,{" "}
+                    <code className="bg-blue-100 px-1 rounded">3번</code> 또는{" "}
+                    <code className="bg-blue-100 px-1 rounded">
+                      &quot;1&quot;
+                    </code>
+                    ,{" "}
+                    <code className="bg-blue-100 px-1 rounded">
+                      &quot;2&quot;
+                    </code>
+                    ,{" "}
+                    <code className="bg-blue-100 px-1 rounded">
+                      &quot;3&quot;
+                    </code>
+                  </p>
+                  <p>
+                    • 지원 형식:{" "}
+                    <code className="bg-blue-100 px-1 rounded">1.</code>,{" "}
+                    <code className="bg-blue-100 px-1 rounded">1:</code>,{" "}
+                    <code className="bg-blue-100 px-1 rounded">1번:</code> 등
+                  </p>
+                </div>
+              </div>
+
+              <div className="mb-4 p-3 bg-gray-50 border border-gray-300 rounded text-xs text-gray-700">
+                <strong>예시:</strong>
+                <pre className="mt-2 whitespace-pre-wrap font-mono text-xs">
+                  {`1번 : 데이터를 기반으로 세상을 이해하고...
+2번 : AI 응용 프로젝트를 다수 진행하며...
+3번 : AI가 데이터를 이해하고 예측하며...`}
+                </pre>
+              </div>
+
+              <textarea
+                value={bulkText}
+                onChange={(e) => setBulkText(e.target.value)}
+                placeholder="여기에 자기소개서 전체를 붙여넣으세요..."
+                className="w-full h-64 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-inha-blue resize-none font-mono text-sm"
+              />
+
+              <div className="mt-2 text-xs text-gray-500">
+                총 {bulkText.length}자 입력됨
+              </div>
+            </div>
+
+            {/* 모달 푸터 */}
+            <div className="px-6 py-4 bg-gray-50 border-t flex justify-end gap-3">
+              <button
+                onClick={() => {
+                  setShowBulkInputModal(false);
+                  setBulkText("");
+                }}
+                className="px-6 py-2 bg-gray-500 text-white rounded hover:bg-gray-600 transition-colors">
+                취소
+              </button>
+              <button
+                onClick={handleBulkInput}
+                className="px-6 py-2 bg-inha-blue text-white rounded hover:opacity-90 transition-opacity">
+                적용하기
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* 저장 버튼 - 오른쪽 상단 */}
-      <div className="flex justify-end">
+      <div className="flex justify-end gap-3">
+        <button
+          onClick={() => setShowBulkInputModal(true)}
+          className="px-6 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors">
+          📝 자소서 한번에 입력하기
+        </button>
         <button
           onClick={handleSave}
           disabled={isSaving}
