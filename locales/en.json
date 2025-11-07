@@ -301,5 +301,18 @@
   "PDF 파싱 오류:": "PDF parsing error:",
   "PDF 파일만 업로드 가능합니다.": "Only PDF files can be uploaded.",
   "PDF에서 텍스트를 추출하고 있습니다...": "Extracting text from PDF...",
-  "#ERROR!": "#ERROR!"
+  "#ERROR!": "#ERROR!",
+  "관심 연구 분야 (300자 이내)": "Research interests (within 300 characters)",
+  "기초 (간단한 의사소통 가능)": "Basic (simple communication possible)",
+  "기타첨부파일(포트폴리오)": "Other Attachments (Portfolio)",
+  "모국어 또는 원어민 수준": "Native or native speaker level",
+  "보통 (일상 회화 가능)": "Intermediate (daily conversation possible)",
+  "요청하신 페이지가 존재하지 않거나 이동되었습니다.": "The page you requested does not exist or has been moved.",
+  "유창함 (업무 및 일상 회화 가능)": "Fluent (business and daily conversation possible)",
+  "이전 페이지로": "Go to previous page",
+  "자": "characters",
+  "페이지를 찾을 수 없습니다": "Page Not Found",
+  "홈으로 돌아가기": "Go back to home",
+  "PDF 업로드에서 자동으로 추출되거나, 직접 입력할 수 있습니다.": "It can be automatically extracted from PDF upload, or you can enter it manually.",
+  "PDF 파일": "PDF File"
 }
