@@ -18,6 +18,7 @@ export default function AIRecommendation() {
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [loadingText, setLoadingText] = useState("");
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isLoadingStarted, setIsLoadingStarted] = useState(false);
   const router = useRouter();
 
   // Zustand store에서 자기소개서 데이터 가져오기
@@ -32,7 +33,9 @@ export default function AIRecommendation() {
 
   // 로딩 애니메이션 효과 - 0.1초마다 10%씩 증가 (1초 완료)
   useEffect(() => {
-    if (viewState === "loading") {
+    if (viewState === "loading" && !isLoadingStarted) {
+      setIsLoadingStarted(true);
+
       const loadingMessages = [
         t("이력서 정보를 분석하는 중입니다..."),
         t("연구실 데이터베이스를 검색하고 있습니다..."),
@@ -69,12 +72,15 @@ export default function AIRecommendation() {
       }, 100); // 0.1초마다
 
       return () => clearInterval(progressInterval);
+    } else if (viewState !== "loading") {
+      setIsLoadingStarted(false);
     }
-  }, [viewState, t]);
+  }, [viewState, isLoadingStarted, t]);
 
   const handleStartRecommendation = () => {
     setViewState("loading");
     setLoadingProgress(0);
+    setIsLoadingStarted(false);
 
     // 이력서 확인
     if (resumeStatus?.hasResume) {
@@ -163,7 +169,7 @@ export default function AIRecommendation() {
   }
 
   // 로딩 중
-  if (viewState === "loading" || isPending) {
+  if (viewState === "loading") {
     return (
       <motion.div
         className="w-full"
@@ -187,7 +193,7 @@ export default function AIRecommendation() {
             <div className="mb-6">
               <div className="h-3 bg-gray-200 rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-inha-blue rounded-full transition-all duration-1000 ease-linear"
+                  className="h-full bg-inha-blue rounded-full transition-all duration-100 ease-linear"
                   style={{ width: `${loadingProgress}%` }}
                 />
               </div>
@@ -212,6 +218,37 @@ export default function AIRecommendation() {
             </AnimatePresence>
 
             <p className="text-gray-500 text-sm mt-4">잠시만 기다려주세요...</p>
+          </div>
+        </div>
+      </motion.div>
+    );
+  }
+
+  // API 호출 중 (isPending 상태)
+  if (isPending) {
+    return (
+      <motion.div
+        className="w-full"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}>
+        <div className="bg-white p-12 rounded-lg text-center shadow-lg border border-gray-200">
+          <div className="max-w-2xl mx-auto">
+            {/* Simple Spinner */}
+            <motion.div
+              className="w-16 h-16 mx-auto mb-8 border-4 border-gray-200 border-t-inha-blue rounded-full"
+              animate={{ rotate: 360 }}
+              transition={{
+                duration: 1,
+                repeat: Infinity,
+                ease: "linear",
+              }}
+            />
+
+            <p className="text-gray-700 font-medium text-lg mb-4">
+              추천 결과를 불러오는 중입니다...
+            </p>
+            <p className="text-gray-500 text-sm">잠시만 기다려주세요...</p>
           </div>
         </div>
       </motion.div>
@@ -263,8 +300,11 @@ export default function AIRecommendation() {
 
         {/* Close Button - Top Right */}
         <button
-          onClick={() => setViewState("initial")}
-          className="absolute top-8 right-8 z-20 w-12 h-12 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 border border-white/20 transition-colors group"
+          onClick={() => {
+            setViewState("initial");
+            setCurrentSlide(0);
+          }}
+          className="absolute top-8 right-8 z-50 w-12 h-12 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 border border-white/20 transition-colors group"
           aria-label="닫기">
           <svg
             className="w-6 h-6 text-white group-hover:text-white/80 transition-colors"
@@ -281,12 +321,12 @@ export default function AIRecommendation() {
         </button>
 
         {/* Slide Number */}
-        <div className="absolute top-8 left-8 text-white text-sm z-10">
+        <div className="absolute top-8 left-8 text-white text-sm z-40">
           {currentSlide + 1} / {totalSlides}
         </div>
 
         {/* Help Text */}
-        <div className="absolute top-8 left-1/2 -translate-x-1/2 text-white/60 text-xs z-10">
+        <div className="absolute top-8 left-1/2 -translate-x-1/2 text-white/60 text-xs z-40">
           Space/→: 다음 • ←: 이전 • ESC: 닫기
         </div>
 
