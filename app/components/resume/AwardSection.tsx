@@ -1,4 +1,5 @@
-"use client";import { useTranslation } from "i18nexus";
+"use client";
+import { useTranslation } from "i18nexus";
 
 import { useState } from "react";
 import Section from "./Section";
@@ -10,7 +11,8 @@ interface Props {
   data: Award[];
 }
 
-export default function AwardSection({ data }: Props) {const { t } = useTranslation();
+export default function AwardSection({ data }: Props) {
+  const { t } = useTranslation();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { mutate: addAward } = useAddAward();
   const { mutate: _deleteAward } = useDeleteAward();
@@ -18,7 +20,7 @@ export default function AwardSection({ data }: Props) {const { t } = useTranslat
   const [formData, setFormData] = useState({
     content: "",
     date: "",
-    fileUrl: ""
+    fileUrl: "",
   });
 
   const handleAdd = () => {
@@ -26,55 +28,58 @@ export default function AwardSection({ data }: Props) {const { t } = useTranslat
       onSuccess: () => {
         setIsModalOpen(false);
         setFormData({ content: "", date: "", fileUrl: "" });
-      }
+      },
     });
   };
 
   return (
     <>
-      <Section title={t("수상경력")} icon="/play-circle.svg" onAdd={() => setIsModalOpen(true)}>
-        {data.length === 0 ?
-        <div className="p-6 text-center text-gray-500">{t("등록된 수상경력이 없습니다.")}
-
-        </div> :
-
-        <table className="w-full">
+      <Section
+        title={t("수상경력")}
+        icon="/play-circle.svg"
+        onAdd={() => setIsModalOpen(true)}>
+        {data.length === 0 ? (
+          <div className="p-6 text-center text-gray-500">
+            {t("등록된 수상경력이 없습니다.")}
+          </div>
+        ) : (
+          <table className="w-full">
             <thead className="bg-gray-100">
               <tr>
-                <th className="px-4 py-2 text-center text-sm font-medium border">{t("수상경력내용")}
-
-              </th>
-                <th className="px-4 py-2 text-center text-sm font-medium border">{t("수상일자")}
-
-              </th>
-                <th className="px-4 py-2 text-center text-sm font-medium border">{t("파일첨부")}
-
-              </th>
+                <th className="px-4 py-2 text-center text-sm font-medium border">
+                  {t("수상경력내용")}
+                </th>
+                <th className="px-4 py-2 text-center text-sm font-medium border">
+                  {t("수상일자")}
+                </th>
+                <th className="px-4 py-2 text-center text-sm font-medium border">
+                  {t("파일첨부")}
+                </th>
               </tr>
             </thead>
             <tbody>
-              {data.map((award) =>
-            <tr key={award.id} className="hover:bg-gray-50">
+              {data.map((award) => (
+                <tr key={award.id} className="hover:bg-gray-50">
                   <td className="px-4 py-2 text-center border">
                     {award.content}
                   </td>
                   <td className="px-4 py-2 text-center border">{award.date}</td>
                   <td className="px-4 py-2 text-center border">
-                    {award.fileUrl ?
-                <a
-                  href={award.fileUrl}
-                  className="text-inha-blue hover:underline">{t("파일보기")}
-
-                </a> :
-
-                "-"
-                }
+                    {award.fileUrl ? (
+                      <a
+                        href={award.fileUrl}
+                        className="text-inha-blue hover:underline">
+                        {t("파일보기")}
+                      </a>
+                    ) : (
+                      "-"
+                    )}
                   </td>
                 </tr>
-            )}
+              ))}
             </tbody>
           </table>
-        }
+        )}
       </Section>
 
       {/* Add Modal */}
@@ -85,16 +90,17 @@ export default function AwardSection({ data }: Props) {const { t } = useTranslat
         <div className="space-y-4">
           <div className="flex items-start gap-4">
             <label className="w-32 text-sm pt-2">
-              <span className="text-red-500">*</span>{t("수상경력내용")}
+              <span className="text-red-500">*</span>
+              {t("수상경력내용")}
             </label>
             <textarea
               value={formData.content}
               onChange={(e) =>
-              setFormData({ ...formData, content: e.target.value })
+                setFormData({ ...formData, content: e.target.value })
               }
               rows={4}
-              className="flex-1 px-3 py-2 border border-gray-300 rounded resize-none" />
-
+              className="flex-1 px-3 py-2 border border-gray-300 rounded resize-none"
+            />
           </div>
           <div className="flex items-center gap-4">
             <label className="w-32 text-sm">{t("파일첨부")}</label>
@@ -102,10 +108,11 @@ export default function AwardSection({ data }: Props) {const { t } = useTranslat
               <input
                 type="text"
                 readOnly
-                className="flex-1 px-3 py-2 border border-gray-300 rounded bg-gray-50" />
+                className="flex-1 px-3 py-2 border border-gray-300 rounded bg-gray-50"
+              />
 
-              <button className="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition-colors whitespace-nowrap">{t("파일찾기")}
-
+              <button className="px-4 py-2 bg-gray-200 text-gray-700 rounded hover:bg-gray-300 transition-colors whitespace-nowrap">
+                {t("파일찾기")}
               </button>
             </div>
           </div>
@@ -113,16 +120,16 @@ export default function AwardSection({ data }: Props) {const { t } = useTranslat
         <div className="flex justify-center gap-2 mt-6">
           <button
             onClick={handleAdd}
-            className="px-6 py-2 bg-red-500 text-white rounded hover:opacity-90 transition-opacity">{t("확인")}
-
+            className="px-6 py-2 bg-red-500 text-white rounded hover:opacity-90 transition-opacity">
+            {t("확인")}
           </button>
           <button
             onClick={() => setIsModalOpen(false)}
-            className="px-6 py-2 bg-gray-500 text-white rounded hover:opacity-90 transition-opacity">{t("닫기")}
-
+            className="px-6 py-2 bg-gray-500 text-white rounded hover:opacity-90 transition-opacity">
+            {t("닫기")}
           </button>
         </div>
       </Modal>
-    </>);
-
+    </>
+  );
 }

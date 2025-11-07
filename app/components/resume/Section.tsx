@@ -19,10 +19,10 @@ export default function Section({
   children,
 }: SectionProps) {
   const { t } = useTranslation();
-  
+
   // SVG 파일인지 확인 (경로로 시작하는지 체크)
-  const isSvgPath = icon.includes('/') || icon.endsWith('.svg');
-  
+  const isSvgPath = icon.includes("/") || icon.endsWith(".svg");
+
   return (
     <div className="mb-6">
       {/* Section Header */}
@@ -30,10 +30,10 @@ export default function Section({
         <h2 className="text-lg font-bold text-black flex items-center gap-2">
           <span className="w-8 h-8 bg-inha-blue rounded-full flex items-center justify-center shadow-md">
             {isSvgPath ? (
-              <Image 
-                src={icon} 
-                alt="" 
-                width={20} 
+              <Image
+                src={icon}
+                alt=""
+                width={20}
                 height={20}
                 className="brightness-0 invert"
               />
